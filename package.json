@@ -1,0 +1,32 @@
+{
+  "name": "metacartelsmartcontracts",
+  "version": "1.0.0",
+  "description": "NFT inventory",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaldyAsh/MetaCartelSmartContracts.git"
+  },
+  "keywords": [
+    "NFT",
+    "blockchain",
+    "Ethereum",
+    "Meta"
+  ],
+  "author": "Anton Grigorev aka BaldyAsh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BaldyAsh/MetaCartelSmartContracts/issues"
+  },
+  "homepage": "https://github.com/BaldyAsh/MetaCartelSmartContracts#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.1",
+    "hardhat": "^2.7.0"
+  }
+}
