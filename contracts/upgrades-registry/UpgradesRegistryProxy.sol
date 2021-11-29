@@ -2,11 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
-import "./InventoryStorage.sol";
-import "./interfaces/IInventoryInitializable.sol";
+import "./UpgradesRegistryStorage.sol";
+import "./interfaces/IUpgradesRegistryInitializable.sol";
 import "../common/interfaces/IERC165.sol";
 
-contract InventoryProxy is InventoryStorage {
+contract UpgradesRegistryProxy is UpgradesRegistryStorage {
 
     error EmptySetupAddress();
     error UnknownMethod();
@@ -14,7 +14,7 @@ contract InventoryProxy is InventoryStorage {
     constructor(address setup) {
         if (setup == address(0x00)) revert EmptySetupAddress();
 
-        _methods[IInventoryInitializable.initialize.selector] = setup;
+        _methods[IUpgradesRegistryInitializable.initialize.selector] = setup;
         _methods[IERC165.supportsInterface.selector] = setup;
     }
 

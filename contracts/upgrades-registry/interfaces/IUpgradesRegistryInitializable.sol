@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface IInventoryProxyInitizable {
+interface IUpgradesRegistryInitializable {
     function initialize(address owner) external;
 }
