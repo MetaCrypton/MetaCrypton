@@ -2,5 +2,5 @@
 pragma solidity ^0.8.0;
 
 interface IUpgradesRegistryInitializable {
-    function initialize(address owner) external;
+    function initialize(address governance) external;
 }
