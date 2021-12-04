@@ -2,10 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "./GovernableErrors.sol";
+import "./GovernableStorage.sol";
 
-contract Governable {
-    modifier isGovernance(address governance) {
-        if (msg.sender != governance) revert GovernableErrors.NotGovernance();
+contract Governable is GovernableStorage {
+    modifier isGovernance() {
+        if (msg.sender != _governance) revert GovernableErrors.NotGovernance();
         _;
     }
 }

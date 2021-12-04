@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IUpgradesRegistryEvents.sol";
+import "./IUpgradesRegistryEventsProxies.sol";
+import "./IUpgradesRegistryEventsUpgrades.sol";
 import "./IUpgradesRegistryProxies.sol";
 import "./IUpgradesRegistryUpgrades.sol";
 
 interface IUpgradesRegistry is
-    IUpgradesRegistryEvents,
+    IUpgradesRegistryEventsProxies,
+    IUpgradesRegistryEventsUpgrades,
     IUpgradesRegistryProxies,
     IUpgradesRegistryUpgrades
 { }

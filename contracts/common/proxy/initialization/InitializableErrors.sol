@@ -3,4 +3,5 @@ pragma solidity ^0.8.0;
 
 library InitializableErrors {
     error NotInitializer();
+    error NoApplyUpgradeOnInit();
 }

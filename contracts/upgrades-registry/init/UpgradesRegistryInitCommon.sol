@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitErrors.sol";
 import "../UpgradesRegistryStorage.sol";
-import "../../common/interfaces/upgradability/IUpgrade.sol";
-import "../../common/interfaces/upgradability/IUpgradable.sol";
+import "../../common/upgradability/IUpgrade.sol";
+import "../../common/upgradability/IUpgradable.sol";
 
 contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
     function _registerProxy(address proxyAddress) internal returns (bytes32) {
@@ -48,7 +48,7 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
 
         upgrades.upgradesAddresses.push(upgradeAddress);
 
-        uint upgradeIndex = upgrades.upgradesAddresses.length - 1;
+        uint256 upgradeIndex = upgrades.upgradesAddresses.length - 1;
         upgrades.upgradesIndexes[upgradeAddress] = upgradeIndex;
 
         return upgradeIndex;
@@ -79,7 +79,7 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
         return _proxies[proxyAddress].currentUpgradesList;
     }
 
-    function _getProxyMaxPossibleUpgradeIndex(bytes32 proxyId) internal view returns (uint) {
+    function _getProxyMaxPossibleUpgradeIndex(bytes32 proxyId) internal view returns (uint256) {
         Upgrades storage upgrades = _upgrades[proxyId];
         uint256 length = upgrades.upgradesAddresses.length;
         if (length == 0) revert UpgradesRegistryInitErrors.NoUpgrades();
