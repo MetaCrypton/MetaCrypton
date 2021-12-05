@@ -39,5 +39,6 @@ contract UpgradesRegistryInitInitializable is
         _methods[IUpgradable(address(0x00)).getMaxPossibleUpgradeIndex.selector] = upgradeAddress;
 
         _methods[IUpgrade(address(0x00)).getProxyId.selector] = upgradeAddress;
+        _methods[IUpgrade(address(0x00)).supportsInterface.selector] = upgradeAddress;
     }
 }

@@ -1,20 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./UpgradesRegistryInitCommon.sol";
-import "../../common/upgradability/IUpgrade.sol";
+import "../InventoryStorage.sol";
+import "../interfaces/IInventory.sol";
 import "../../common/proxy/initialization/InitializableErrors.sol";
+import "../../common/upgradability/IUpgrade.sol";
 
-contract UpgradesRegistryInitUpgrade is
+
+contract InventoryInitUpgrade is
     IUpgrade,
-    UpgradesRegistryInitCommon
+    InventoryStorage
 {
     function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
         return _methods[interfaceId] != address(0x00)
             || interfaceId == type(IERC165).interfaceId
             || interfaceId == type(IUpgradable).interfaceId
             || interfaceId == type(IUpgrade).interfaceId
-            || interfaceId == type(IUpgradesRegistry).interfaceId;
+            || interfaceId == type(IInventory).interfaceId;
     }
 
     function getProxyId() external pure override returns (bytes32) {

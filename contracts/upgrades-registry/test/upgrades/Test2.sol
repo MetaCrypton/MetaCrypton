@@ -25,10 +25,12 @@ contract Test2 is
     }
 
     function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
-        return _methods[interfaceId] != address(0x00);
+        return _methods[interfaceId] != address(0x00)
+            || interfaceId == type(IUpgrade).interfaceId
+            || interfaceId == type(ITest).interfaceId;
     }
     
-    function test() external pure override returns (uint) {
+    function test() external pure override returns (uint256) {
         return 2;
     }
 

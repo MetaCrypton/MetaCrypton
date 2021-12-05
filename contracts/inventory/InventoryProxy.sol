@@ -2,42 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "./InventoryStorage.sol";
-import "./interfaces/IInventoryInitializable.sol";
-import "../common/interfaces/IERC165.sol";
+import "../common/proxy/Proxy.sol";
 
-contract InventoryProxy is InventoryStorage {
+contract InventoryProxy is Proxy, InventoryStorage {
+    error UseDepositEtherFunction();
 
-    error EmptySetupAddress();
-    error UnknownMethod();
+    constructor(address setup) Proxy(setup) { }
 
-    constructor(address setup) {
-        if (setup == address(0x00)) revert EmptySetupAddress();
-
-        _methods[IInventoryInitializable.initialize.selector] = setup;
-        _methods[IERC165.supportsInterface.selector] = setup;
-    }
-
-    receive() external payable {}
-
-
-    fallback() external payable {
-        address _impl = _methods[msg.sig];
-        if (_impl == address(0x00)) revert UnknownMethod();
-
-        assembly {
-            let p := mload(0x40)
-            calldatacopy(p, 0x00, calldatasize())
-            let result := delegatecall(gas(), _impl, p, calldatasize(), 0x00, 0x00)
-            let size := returndatasize()
-            returndatacopy(p, 0x00, size)
-
-            switch result
-            case 0x00 {
-                revert(p, size)
-            }
-            default {
-                return(p, size)
-            }
-        }
+    receive() external payable override (Proxy) {
+        revert UseDepositEtherFunction();
     }
 }

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface IUpgradesRegistryUpgrades {
+import "./IUpgradesRegistryEventsUpgrades.sol";
+
+interface IUpgradesRegistryUpgrades is IUpgradesRegistryEventsUpgrades {
     function registerUpgrade(address upgradeAddress) external;
 
     function upgradeProxy(uint256 upgradeIndex) external returns (address upgradeAddress);

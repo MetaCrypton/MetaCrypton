@@ -1,8 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract InventoryStorage {
-    address internal _owner;
+import "./InventoryStructs.sol";
+import "../common/proxy/ProxyStorage.sol";
 
-    mapping(bytes4 => address) internal _methods;
+contract InventoryStorage is ProxyStorage {
+    bytes32 internal constant PROXY_ID = keccak256("Inventory");
+
+    address internal _upgradesRegistry;
+
+    address internal _nftAddress;
+    uint256 internal _nftId;
+
+    ERC20Set internal _erc20s;
+    ERC721Set internal _erc721s;
 }

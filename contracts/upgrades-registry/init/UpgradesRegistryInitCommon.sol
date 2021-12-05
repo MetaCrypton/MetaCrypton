@@ -117,14 +117,11 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
     }
 
     function _verifyIUpgradableInterface(address componentAddress) internal view {
-        if (!IERC165(componentAddress).supportsInterface(IUpgradable.upgrade.selector)) revert UpgradesRegistryInitErrors.NoUpgradeMethod();
-        if (!IERC165(componentAddress).supportsInterface(IUpgradable.getCurrentUpgrades.selector)) revert UpgradesRegistryInitErrors.NoGetCurrentUpgradesMethod();
-        if (!IERC165(componentAddress).supportsInterface(IUpgradable.getMaxPossibleUpgradeIndex.selector)) revert UpgradesRegistryInitErrors.NoGetMaxPossibleUpgradeIndexMethod();
+        if (!IERC165(componentAddress).supportsInterface(type(IUpgradable).interfaceId)) revert UpgradesRegistryInitErrors.NoUpgradableInterfaceSupport();
     }
 
     function _verifyIUpgradeInterface(address componentAddress) internal view {
-        if (!IERC165(componentAddress).supportsInterface(IUpgrade.applyUpgrade.selector)) revert UpgradesRegistryInitErrors.NoApplyUpgradeMethod();
-        if (!IERC165(componentAddress).supportsInterface(IUpgrade.getProxyId.selector)) revert UpgradesRegistryInitErrors.NoGetProxyIdMethod();
+        if (!IERC165(componentAddress).supportsInterface(type(IUpgrade).interfaceId)) revert UpgradesRegistryInitErrors.NoUpgradeInterfaceSupport();
     }
 
     function _verifyProxyInput(bytes32 proxyId, address proxyAddress) internal pure {

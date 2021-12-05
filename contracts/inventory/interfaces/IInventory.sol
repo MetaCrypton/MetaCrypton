@@ -1,32 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface IInventory {
-    event DepositERC721 (
-        address indexed token,
-        uint256 indexed tokenId
-    );
+import "./IInventoryEther.sol";
+import "./IInventoryERC20.sol";
+import "./IInventoryERC721.sol";
+import "../../common/interfaces/IERC1155.sol";
+import "../../common/interfaces/IERC1155Receiver.sol";
+import "../../common/interfaces/IERC20Receiver.sol";
+import "../../common/interfaces/IERC721Receiver.sol";
 
-    event DepositERC20 (
-        address indexed token,
-        uint256 amount
-    );
-
-    event WithdrawERC721 (
-        address indexed token,
-        uint256 indexed tokenId
-    );
-
-    event WithdrawERC20 (
-        address indexed token,
-        uint256 amount
-    );
-
-    function depositERC721(address token, uint256 tokenId) external;
-
-    function depositERC20(address token, uint256 amount) external;
-
-    function withdrawERC721(address token, uint256 tokenId) external;
-
-    function withdrawERC20(address token, uint256 amount) external;
-}
+interface IInventory is
+    IInventoryEther,
+    IInventoryERC20,
+    IInventoryERC721,
+    IERC1155,
+    IERC1155Receiver
+    IERC20Receiver,
+    IERC721Receiver
+{ }

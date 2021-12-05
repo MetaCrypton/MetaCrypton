@@ -39,10 +39,14 @@ contract Test1 is
     }
     
     function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
-        return _methods[interfaceId] != address(0x00);
+        return _methods[interfaceId] != address(0x00)
+            || interfaceId == type(IERC165).interfaceId
+            || interfaceId == type(IUpgradable).interfaceId
+            || interfaceId == type(IUpgrade).interfaceId
+            || interfaceId == type(ITest).interfaceId;
     }
     
-    function test() external pure override returns (uint) {
+    function test() external pure override returns (uint256) {
         return 1;
     }
 
@@ -60,9 +64,20 @@ contract Test1 is
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
         _governance = governance;
         _upgradesRegistry = upgradesRegistry;
-        
-        _methods[ITest(address(0x00)).test.selector] = _methods[msg.sig];
+
+        _storeMethods(_methods[msg.sig]);
 
         super.initialize(input);
+    }
+
+    function _storeMethods(address upgradeAddress) internal {
+        _methods[ITest(address(0x00)).test.selector] = upgradeAddress;
+
+        _methods[IUpgradable(address(0x00)).upgrade.selector] = upgradeAddress;
+        _methods[IUpgradable(address(0x00)).getCurrentUpgrades.selector] = upgradeAddress;
+        _methods[IUpgradable(address(0x00)).getMaxPossibleUpgradeIndex.selector] = upgradeAddress;
+
+        _methods[IUpgrade(address(0x00)).getProxyId.selector] = upgradeAddress;
+        _methods[IUpgrade(address(0x00)).supportsInterface.selector] = upgradeAddress;
     }
 }

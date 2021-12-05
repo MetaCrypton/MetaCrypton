@@ -17,7 +17,7 @@ contract Proxy is ProxyStorage {
         _methods[IERC165.supportsInterface.selector] = setup;
     }
 
-    receive() external payable {}
+    receive() external payable virtual {}
 
 
     fallback() external payable {

@@ -3,12 +3,10 @@ pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitCommon.sol";
 import "../interfaces/IUpgradesRegistryProxies.sol";
-import "../interfaces/IUpgradesRegistryEventsProxies.sol";
 import "../../common/governance/Governable.sol";
 
 contract UpgradesRegistryInitProxies is
     IUpgradesRegistryProxies,
-    IUpgradesRegistryEventsProxies,
     Governable,
     UpgradesRegistryInitCommon
 {

@@ -2,13 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitCommon.sol";
-import "../interfaces/IUpgradesRegistryEventsUpgrades.sol";
 import "../interfaces/IUpgradesRegistryUpgrades.sol";
 import "../../common/governance/Governable.sol";
 
 contract UpgradesRegistryInitUpgrades is
     IUpgradesRegistryUpgrades,
-    IUpgradesRegistryEventsUpgrades,
     Governable,
     UpgradesRegistryInitCommon
 {

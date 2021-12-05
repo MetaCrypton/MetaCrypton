@@ -12,9 +12,6 @@ library UpgradesRegistryInitErrors {
     error UnexistingUpgrade();
     error UpgradeApplied();
     error NoUpgrades();
-    error NoUpgradeMethod();
-    error NoGetCurrentUpgradesMethod();
-    error NoGetMaxPossibleUpgradeIndexMethod();
-    error NoApplyUpgradeMethod();
-    error NoGetProxyIdMethod();
+    error NoUpgradableInterfaceSupport();
+    error NoUpgradeInterfaceSupport();
 }
