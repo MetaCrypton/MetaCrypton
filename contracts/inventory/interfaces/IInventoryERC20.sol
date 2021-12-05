@@ -16,9 +16,9 @@ interface IInventoryERC20 {
         uint256 amount
     );
 
-    function depositERC20(address token, uint256 amount, bytes calldata data) external;
+    function depositERC20(address token, uint256 amount, bytes calldata data) external returns (bytes memory);
 
-    function withdrawERC20(address recipient, address token, uint256 amount, bytes calldata data) external;
+    function withdrawERC20(address recipient, address token, uint256 amount, bytes calldata data) external returns (bytes memory);
     
     function getERC20s() external view returns (ERC20Struct[] memory);
     

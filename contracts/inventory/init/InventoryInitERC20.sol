@@ -2,33 +2,44 @@
 pragma solidity ^0.8.0;
 
 import "./InventoryInitOwnership.sol";
+import "../InventoryErrors.sol";
+import "../interfaces/IInventoryERC20Internal.sol";
 import "../interfaces/IInventoryERC20.sol";
 import "../../common/interfaces/IERC20.sol";
+import "../../common/interfaces/IERC165.sol";
 
 contract InventoryERC20 is
     IInventoryERC20,
     InventoryInitOwnership
 {
     function depositERC20(address token, uint256 amount, bytes calldata data) external override isOwner returns (bytes memory) {
-        emit DepositERC20(
-            msg.sender,
-            token,
-            amount
-        );
-
-        IERC20(token).transferFrom(msg.sender, address(this), amount);
-
-        _addERC20(
-            token,
-            amount
-        );
+        _depositERC20(token, amount);
 
         if (IERC165(address(this)).supportsInterface(IInventory(address(0x00)).processDepositERC20.selector)) {
-            return IInventory(address(this)).processDepositERC20(token, amount, data);
+            return IInventoryERC20Internal(address(this)).processDepositERC20(token, amount, data);
         }
     }
 
-    function withdrawERC20(address recipient, address token, uint256 amount, bytes calldata) external override isOwner returns (bytes memory) {
+    function withdrawERC20(address recipient, address token, uint256 amount, bytes calldata data) external override isOwner returns (bytes memory) {
+        _withdrawERC20(recipient, token, amount);
+
+        if (IERC165(address(this)).supportsInterface(IInventory(address(0x00)).processWithdrawERC20.selector)) {
+            return IInventoryERC20Internal(address(this)).processWithdrawERC20(token, amount, data);
+        }
+    }
+    
+    function getERC20s() external view override returns (ERC20Struct[] memory) {
+        return _erc20s.tokens;
+    }
+    
+    function getERC20Balance(address token) external view override returns (uint256) {
+        uint256 index = _getERC20IndexByAddress(token);
+        if (index == 0) revert InventoryErrors.UnexistingToken();
+
+        return _erc20s.tokens[index - 1].amount;
+    }
+
+    function _withdrawERC20(address recipient, address token, uint256 amount) internal {
         emit WithdrawERC20(
             recipient,
             token,
@@ -41,21 +52,21 @@ contract InventoryERC20 is
             token,
             amount
         );
-
-        if (IERC165(address(this)).supportsInterface(IInventory(address(0x00)).processWithdrawERC20.selector)) {
-            return IInventory(address(this)).processWithdrawERC20(token, amount, data);
-        }
     }
-    
-    function getERC20s() external view override returns (ERC20Struct[] memory) {
-        return _erc20s.tokens;
-    }
-    
-    function getERC20Balance(address token) external view override returns (uint256) {
-        uint256 index = _getERC20IndexByAddress(token);
-        if (index == 0) revert UnexistingToken();
 
-        return _erc20s.tokens[index - 1].amount;
+    function _depositERC20(address token, uint256 amount) internal {
+        emit DepositERC20(
+            msg.sender,
+            token,
+            amount
+        );
+
+        IERC20(token).transferFrom(msg.sender, address(this), amount);
+
+        _addERC20(
+            token,
+            amount
+        );
     }
 
     function _addERC20(address token, uint256 amount) internal verifyAddToken(token, amount) {
