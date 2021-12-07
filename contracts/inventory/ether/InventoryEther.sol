@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./InventoryInitAssets.sol";
-import "./InventoryInitOwnership.sol";
+import "./InventoryEtherUpgrade.sol";
+import "../init/InventoryInitAssets.sol";
+import "../init/InventoryInitOwnership.sol";
 import "../InventoryErrors.sol";
 import "../InventoryStorage.sol";
 import "../interfaces/IInventoryEtherInternal.sol";
@@ -11,9 +12,10 @@ import "../interfaces/IInventory.sol";
 import "../interfaces/IInventoryAssetsEvents.sol";
 import "../../common/interfaces/IERC165.sol";
 
-contract InventoryInitEther is
+contract InventoryEther is
     IInventoryEther,
     IInventoryAssetsEvents,
+    InventoryEtherUpgrade,
     InventoryInitOwnership
 {
     using InventoryInitAssets for *;

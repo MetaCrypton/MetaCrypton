@@ -42,9 +42,7 @@ contract InventoryInitInitializable is
         _methods[IInventory(address(0x00)).getERC721s.selector] = upgradeAddress;
         _methods[IInventory(address(0x00)).isERC721Owner.selector] = upgradeAddress;
 
-        _methods[IInventory(address(0x00)).depositEther.selector] = upgradeAddress;
-        _methods[IInventory(address(0x00)).withdrawEther.selector] = upgradeAddress;
-        _methods[IInventory(address(0x00)).getEtherBalance.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).onERC721Received.selector] = upgradeAddress;
 
         _methods[IUpgradable(address(0x00)).upgrade.selector] = upgradeAddress;
         _methods[IUpgradable(address(0x00)).getCurrentUpgrades.selector] = upgradeAddress;
