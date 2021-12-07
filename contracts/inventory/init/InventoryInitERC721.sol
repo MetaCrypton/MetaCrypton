@@ -20,11 +20,11 @@ contract InventoryInitERC721 is
         _;
     }
 
-    function depositERC721(address token, uint256 tokenId, bytes calldata data) external override isOwner returns (bytes memory) {
-        _depositERC721(token, tokenId);
+    function depositERC721(address from, address token, uint256 tokenId, bytes calldata data) external override isOwner returns (bytes memory) {
+        _depositERC721(from, token, tokenId);
 
         if (IERC165(address(this)).supportsInterface(IInventoryERC721Internal(address(0x00)).processDepositERC721.selector)) {
-            return IInventoryERC721Internal(address(this)).processDepositERC721(msg.sender, token, tokenId, data);
+            return IInventoryERC721Internal(address(this)).processDepositERC721(from, token, tokenId, data);
         }
         return new bytes(0);
     }
@@ -48,9 +48,9 @@ contract InventoryInitERC721 is
         return index != 0;
     }
 
-    function _depositERC721(address token, uint256 tokenId) internal verifyERC721Input(token) {
+    function _depositERC721(address from, address token, uint256 tokenId) internal verifyERC721Input(token) {
         emit DepositERC721(
-            msg.sender,
+            from,
             token,
             tokenId
         );
@@ -61,7 +61,7 @@ contract InventoryInitERC721 is
         if (index != 0) revert InventoryErrors.ExistingToken();
         _addAsset(id, AssetType.ERC721, abi.encode(ERC721Struct(token, tokenId)));
 
-        IERC721(token).transferFrom(msg.sender, address(this), tokenId);
+        IERC721(token).transferFrom(from, address(this), tokenId);
     }
 
     function _withdrawERC721(address recipient, address token, uint256 tokenId) internal verifyERC721Input(token) {

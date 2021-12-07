@@ -32,6 +32,20 @@ contract InventoryInitInitializable is
     }
 
     function _storeMethods(address upgradeAddress) internal {
+        _methods[IInventory(address(0x00)).depositERC20.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).withdrawERC20.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).getERC20s.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).getERC20Balance.selector] = upgradeAddress;
+
+        _methods[IInventory(address(0x00)).depositERC721.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).withdrawERC721.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).getERC721s.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).isERC721Owner.selector] = upgradeAddress;
+
+        _methods[IInventory(address(0x00)).depositEther.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).withdrawEther.selector] = upgradeAddress;
+        _methods[IInventory(address(0x00)).getEtherBalance.selector] = upgradeAddress;
+
         _methods[IUpgradable(address(0x00)).upgrade.selector] = upgradeAddress;
         _methods[IUpgradable(address(0x00)).getCurrentUpgrades.selector] = upgradeAddress;
         _methods[IUpgradable(address(0x00)).getMaxPossibleUpgradeIndex.selector] = upgradeAddress;

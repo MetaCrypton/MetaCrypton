@@ -21,11 +21,11 @@ contract InventoryInitERC20 is
         _;
     }
 
-    function depositERC20(address token, uint256 amount, bytes calldata data) external override isOwner returns (bytes memory) {
-        _depositERC20(token, amount);
+    function depositERC20(address from, address token, uint256 amount, bytes calldata data) external override isOwner returns (bytes memory) {
+        _depositERC20(from, token, amount);
 
         if (IERC165(address(this)).supportsInterface(IInventoryERC20Internal(address(0x00)).processDepositERC20.selector)) {
-            return IInventoryERC20Internal(address(this)).processDepositERC20(msg.sender, token, amount, data);
+            return IInventoryERC20Internal(address(this)).processDepositERC20(from, token, amount, data);
         }
         return new bytes(0);
     }
@@ -55,9 +55,9 @@ contract InventoryInitERC20 is
         return storedToken.amount;
     }
 
-    function _depositERC20(address token, uint256 amount) internal verifyERC20Input(token, amount) {
+    function _depositERC20(address from, address token, uint256 amount) internal verifyERC20Input(token, amount) {
         emit DepositERC20(
-            msg.sender,
+            from,
             token,
             amount
         );
@@ -76,7 +76,7 @@ contract InventoryInitERC20 is
             _updateAsset(asset, abi.encode(storedToken));
         }
 
-        IERC20(token).transferFrom(msg.sender, address(this), amount);
+        IERC20(token).transferFrom(from, address(this), amount);
     }
 
     function _withdrawERC20(address recipient, address token, uint256 amount) internal verifyERC20Input(token, amount) {

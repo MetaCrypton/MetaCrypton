@@ -15,7 +15,7 @@ interface IInventoryERC721 {
         uint256 indexed tokenId
     );
 
-    function depositERC721(address token, uint256 tokenId, bytes calldata data) external returns (bytes memory);
+    function depositERC721(address from, address token, uint256 tokenId, bytes calldata data) external returns (bytes memory);
 
     function withdrawERC721(address recipient, address token, uint256 tokenId, bytes calldata data) external returns (bytes memory);
     
