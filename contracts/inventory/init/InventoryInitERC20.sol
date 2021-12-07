@@ -4,17 +4,21 @@ pragma solidity ^0.8.0;
 import "./InventoryInitAssets.sol";
 import "./InventoryInitOwnership.sol";
 import "../InventoryErrors.sol";
+import "../InventoryStorage.sol";
 import "../interfaces/IInventoryERC20Internal.sol";
 import "../interfaces/IInventoryERC20.sol";
 import "../interfaces/IInventory.sol";
+import "../interfaces/IInventoryAssetsEvents.sol";
 import "../../common/interfaces/IERC20.sol";
 import "../../common/interfaces/IERC165.sol";
 
 contract InventoryInitERC20 is
     IInventoryERC20,
-    InventoryInitOwnership,
-    InventoryInitAssets
+    IInventoryAssetsEvents,
+    InventoryInitOwnership
 {
+    using InventoryInitAssets for *;
+    
     modifier verifyERC20Input(address token, uint256 amount) {
         if (token == address(0x00)) revert InventoryErrors.EmptyAddress();
         if (amount == 0) revert InventoryErrors.ZeroAmount();
@@ -40,15 +44,15 @@ contract InventoryInitERC20 is
     }
     
     function getERC20s(uint256 startIndex, uint256 number) external view override returns (ERC20Struct[] memory) {
-        return _assetsListToERC20(_getAssets(startIndex, number));
+        return _assetsListToERC20(_assets._getAssets(startIndex, number));
     }
     
     function getERC20Balance(address token) external view override returns (uint256) {
         uint256 id = _getERC20Id(token);
-        uint256 index = _getAssetIndexById(id);
+        uint256 index = _assets._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _getAssetByIndex(index);
+        Asset storage asset = _assets._getAssetByIndex(index);
         ERC20Struct memory storedToken = _assetToERC20Token(asset);
         if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
 
@@ -63,17 +67,27 @@ contract InventoryInitERC20 is
         );
 
         uint256 id = _getERC20Id(token);
-        uint256 index = _getAssetIndexById(id);
+        uint256 index = _assets._getAssetIndexById(id);
 
         if (index == 0) {
-            _addAsset(id, AssetType.ERC20, abi.encode(ERC20Struct(token, amount)));
+            bytes memory data = abi.encode(ERC20Struct(token, amount));
+            
+            emit AssetAdded(
+                id,
+                AssetType.ERC20,
+                data
+            );
+            _assets._addAsset(id, AssetType.ERC20, data);
         } else {
-            Asset storage asset = _getAssetByIndex(index);
+            Asset storage asset = _assets._getAssetByIndex(index);
             ERC20Struct memory storedToken = _assetToERC20Token(asset);
             if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
             if (type(uint256).max - storedToken.amount < amount) revert InventoryErrors.DepositOverflow();
             storedToken.amount += amount;
-            _updateAsset(asset, abi.encode(storedToken));
+
+            bytes memory data = abi.encode(storedToken);
+            emit AssetUpdated(id, data);
+            asset._updateAsset(data);
         }
 
         IERC20(token).transferFrom(from, address(this), amount);
@@ -87,19 +101,22 @@ contract InventoryInitERC20 is
         );
 
         uint256 id = _getERC20Id(token);
-        uint256 index = _getAssetIndexById(id);
+        uint256 index = _assets._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _getAssetByIndex(index);
+        Asset storage asset = _assets._getAssetByIndex(index);
         ERC20Struct memory storedToken = _assetToERC20Token(asset);
         if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
         if (storedToken.amount < amount) revert InventoryErrors.WithdrawOverflow();
 
         storedToken.amount -= amount;
         if (storedToken.amount > 0) {
-            _updateAsset(asset, abi.encode(storedToken));
+            bytes memory data = abi.encode(storedToken);
+            emit AssetUpdated(id, data);
+            asset._updateAsset(data);
         } else {
-            _removeAsset(index, asset);
+            emit AssetRemoved(id);
+            _assets._removeAsset(index);
         }
 
         IERC20(token).transfer(recipient, amount);

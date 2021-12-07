@@ -2,61 +2,51 @@
 pragma solidity ^0.8.0;
 
 import "../InventoryStorage.sol";
-import "../interfaces/IInventoryAssets.sol";
 import "../InventoryErrors.sol";
 
-contract InventoryInitAssets is IInventoryAssets, InventoryStorage {
-    function _addAsset(uint256 id, AssetType assetType, bytes memory data) internal {
-        _assets.assets.push(Asset(id, assetType, data));
-        _assets.assetIndexById[id] = _assets.assets.length;
-
-        emit AssetAdded(
-            id,
-            assetType,
-            data
-        );
+library InventoryInitAssets {
+    function _addAsset(AssetsSet storage assets, uint256 id, AssetType assetType, bytes memory data) internal {
+        assets.assets.push(Asset(id, assetType, data));
+        assets.assetIndexById[id] = assets.assets.length;
     }
 
     function _updateAsset(Asset storage asset, bytes memory data) internal {
         asset.data = data;
-
-        emit AssetUpdated(asset.id, data);
     }
 
-    function _removeAsset(uint256 index, Asset storage toRemove) internal {
-        uint256 idToRemove = toRemove.id;
+    function _removeAsset(AssetsSet storage assets, uint256 index) internal {
+        Asset storage old = _getAssetByIndex(assets, index);
+        uint256 oldId = old.id;
 
-        uint256 lastIndex = _assets.assets.length - 1;
-        Asset memory last = _assets.assets[lastIndex];
+        uint256 lastIndex = assets.assets.length - 1;
+        Asset memory last = assets.assets[lastIndex];
         
-        toRemove.id = last.id;
-        toRemove.assetType = last.assetType;
-        toRemove.data = last.data;
-        _assets.assetIndexById[last.id] = index;
+        old.id = last.id;
+        old.assetType = last.assetType;
+        old.data = last.data;
+        assets.assetIndexById[last.id] = index;
 
-        _assets.assets.pop();
-        delete _assets.assetIndexById[idToRemove];
-
-        emit AssetRemoved(idToRemove);
+        assets.assets.pop();
+        delete assets.assetIndexById[oldId];
     }
 
-    function _getAssets(uint256 startIndex, uint256 number) internal view returns (Asset[] memory) {
+    function _getAssets(AssetsSet storage assets, uint256 startIndex, uint256 number) internal view returns (Asset[] memory) {
         uint256 endIndex = startIndex + number;
-        if (endIndex >= _assets.assets.length) revert InventoryErrors.WrongEndIndex();
+        if (endIndex >= assets.assets.length) revert InventoryErrors.WrongEndIndex();
         
-        Asset[] memory assets = new Asset[](number);
+        Asset[] memory assetsToReturn = new Asset[](number);
         for (uint256 i = startIndex; i < endIndex; i++) {
-            assets[i - startIndex] = _assets.assets[i];
+            assetsToReturn[i - startIndex] = assets.assets[i];
         }
-        return assets;
+        return assetsToReturn;
     }
 
-    function _getAssetByIndex(uint256 index) internal view returns (Asset storage) {
-        return _assets.assets[index - 1];
+    function _getAssetByIndex(AssetsSet storage assets, uint256 index) internal view returns (Asset storage) {
+        return assets.assets[index - 1];
     }
 
-    function _getAssetIndexById(uint256 id) internal view returns (uint256) {
-        uint256 index = _assets.assetIndexById[id];
+    function _getAssetIndexById(AssetsSet storage assets, uint256 id) internal view returns (uint256) {
+        uint256 index = assets.assetIndexById[id];
         return index;
     }
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "../InventoryStructs.sol";
 
-interface IInventoryAssets {
+interface IInventoryAssetsEvents {
     event AssetAdded(
         uint256 indexed id,
         AssetType indexed assetType,
