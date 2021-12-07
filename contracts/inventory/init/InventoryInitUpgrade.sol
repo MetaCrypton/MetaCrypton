@@ -5,6 +5,7 @@ import "../InventoryStorage.sol";
 import "../interfaces/IInventory.sol";
 import "../../common/proxy/initialization/InitializableErrors.sol";
 import "../../common/upgradability/IUpgrade.sol";
+import "../../common/upgradability/IUpgradable.sol";
 
 
 contract InventoryInitUpgrade is

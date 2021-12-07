@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitCommon.sol";
+import "../interfaces/IUpgradesRegistry.sol";
 import "../../common/upgradability/IUpgrade.sol";
 import "../../common/proxy/initialization/InitializableErrors.sol";
 

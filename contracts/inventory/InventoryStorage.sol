@@ -12,6 +12,5 @@ contract InventoryStorage is ProxyStorage {
     address internal _nftAddress;
     uint256 internal _nftId;
 
-    ERC20Set internal _erc20s;
-    ERC721Set internal _erc721s;
+    AssetsSet internal _assets;
 }
