@@ -14,4 +14,5 @@ contract InventoryStorage is ProxyStorage {
     uint256 internal _nftId;
 
     AssetsSet internal _assetsSet;
+    EternalStorage internal _eternalStorage;
 }

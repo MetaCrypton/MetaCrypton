@@ -50,4 +50,9 @@ library InventoryInitAssets {
         uint256 index = assets.assetIndexById[id];
         return index;
     }
+
+    function _verifyAssetExists(AssetsSet storage assets, uint256 assetId) internal view {
+        uint256 index = _getAssetIndexById(assets, assetId);
+        if (index == 0) revert InventoryErrors.UnexistingAsset();
+    }
 }
