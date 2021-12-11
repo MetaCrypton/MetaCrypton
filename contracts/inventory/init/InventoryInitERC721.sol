@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Copyright Anton "BaldyAsh" Grigorev
 pragma solidity ^0.8.0;
 
 import "./InventoryInitAssets.sol";
@@ -8,13 +9,13 @@ import "../InventoryStorage.sol";
 import "../interfaces/IInventoryERC721Internal.sol";
 import "../interfaces/IInventoryERC721.sol";
 import "../interfaces/IInventory.sol";
-import "../interfaces/IInventoryAssetsEvents.sol";
+import "../interfaces/IInventoryEvents.sol";
 import "../../common/interfaces/IERC721.sol";
 import "../../common/interfaces/IERC165.sol";
 
 contract InventoryInitERC721 is
     IInventoryERC721,
-    IInventoryAssetsEvents,
+    IInventoryEvents,
     InventoryInitOwnership
 {
     using InventoryInitAssets for *;
@@ -43,12 +44,12 @@ contract InventoryInitERC721 is
     }
     
     function getERC721s(uint256 startIndex, uint256 number) external view override returns (ERC721Struct[] memory) {
-        return _assetsListToERC721(_assets._getAssets(startIndex, number));
+        return _assetsSetListToERC721(_assetsSet._getAssets(startIndex, number));
     }
     
     function isERC721Owner(address token, uint256 tokenId) external view override returns (bool) {
         uint256 id = _getERC721Id(token, tokenId);
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
         return index != 0;
     }
 
@@ -60,7 +61,7 @@ contract InventoryInitERC721 is
         );
 
         uint256 id = _getERC721Id(token, tokenId);
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
 
         if (index != 0) revert InventoryErrors.ExistingToken();
         bytes memory data = abi.encode(ERC721Struct(token, tokenId));
@@ -69,7 +70,7 @@ contract InventoryInitERC721 is
             AssetType.ERC721,
             data
         );
-        _assets._addAsset(id, AssetType.ERC721, data);
+        _assetsSet._addAsset(id, AssetType.ERC721, data);
 
         IERC721(token).transferFrom(from, address(this), tokenId);
     }
@@ -82,16 +83,16 @@ contract InventoryInitERC721 is
         );
 
         uint256 id = _getERC721Id(token, tokenId);
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _assets._getAssetByIndex(index);
+        Asset storage asset = _assetsSet._getAssetByIndex(index);
         ERC721Struct memory storedToken = _assetToERC721Token(asset);
         if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
         if (storedToken.tokenId != tokenId) revert InventoryErrors.UnmatchingTokenId();
 
         emit AssetRemoved(id);
-        _assets._removeAsset(index);
+        _assetsSet._removeAsset(index);
 
         IERC721(token).transferFrom(address(this), recipient, tokenId);
     }
@@ -102,7 +103,7 @@ contract InventoryInitERC721 is
         return abi.decode(asset.data, (ERC721Struct));
     }
 
-    function _assetsListToERC721(Asset[] memory assets) internal pure returns (ERC721Struct[] memory) {
+    function _assetsSetListToERC721(Asset[] memory assets) internal pure returns (ERC721Struct[] memory) {
         uint256 tokensLength = 0;
         uint256 assetsLength = assets.length;
 

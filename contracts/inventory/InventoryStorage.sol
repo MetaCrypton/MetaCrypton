@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Copyright Anton "BaldyAsh" Grigorev
 pragma solidity ^0.8.0;
 
 import "./InventoryStructs.sol";
@@ -12,5 +13,5 @@ contract InventoryStorage is ProxyStorage {
     address internal _nftAddress;
     uint256 internal _nftId;
 
-    AssetsSet internal _assets;
+    AssetsSet internal _assetsSet;
 }

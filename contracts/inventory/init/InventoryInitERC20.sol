@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Copyright Anton "BaldyAsh" Grigorev
 pragma solidity ^0.8.0;
 
 import "./InventoryInitAssets.sol";
@@ -8,13 +9,13 @@ import "../InventoryStorage.sol";
 import "../interfaces/IInventoryERC20Internal.sol";
 import "../interfaces/IInventoryERC20.sol";
 import "../interfaces/IInventory.sol";
-import "../interfaces/IInventoryAssetsEvents.sol";
+import "../interfaces/IInventoryEvents.sol";
 import "../../common/interfaces/IERC20.sol";
 import "../../common/interfaces/IERC165.sol";
 
 contract InventoryInitERC20 is
     IInventoryERC20,
-    IInventoryAssetsEvents,
+    IInventoryEvents,
     InventoryInitOwnership
 {
     using InventoryInitAssets for *;
@@ -44,15 +45,15 @@ contract InventoryInitERC20 is
     }
     
     function getERC20s(uint256 startIndex, uint256 number) external view override returns (ERC20Struct[] memory) {
-        return _assetsListToERC20(_assets._getAssets(startIndex, number));
+        return _assetsSetListToERC20(_assetsSet._getAssets(startIndex, number));
     }
     
     function getERC20Balance(address token) external view override returns (uint256) {
         uint256 id = _getERC20Id(token);
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _assets._getAssetByIndex(index);
+        Asset storage asset = _assetsSet._getAssetByIndex(index);
         ERC20Struct memory storedToken = _assetToERC20Token(asset);
         if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
 
@@ -67,7 +68,7 @@ contract InventoryInitERC20 is
         );
 
         uint256 id = _getERC20Id(token);
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
 
         if (index == 0) {
             bytes memory data = abi.encode(ERC20Struct(token, amount));
@@ -77,9 +78,9 @@ contract InventoryInitERC20 is
                 AssetType.ERC20,
                 data
             );
-            _assets._addAsset(id, AssetType.ERC20, data);
+            _assetsSet._addAsset(id, AssetType.ERC20, data);
         } else {
-            Asset storage asset = _assets._getAssetByIndex(index);
+            Asset storage asset = _assetsSet._getAssetByIndex(index);
             ERC20Struct memory storedToken = _assetToERC20Token(asset);
             if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
             if (type(uint256).max - storedToken.amount < amount) revert InventoryErrors.DepositOverflow();
@@ -101,10 +102,10 @@ contract InventoryInitERC20 is
         );
 
         uint256 id = _getERC20Id(token);
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _assets._getAssetByIndex(index);
+        Asset storage asset = _assetsSet._getAssetByIndex(index);
         ERC20Struct memory storedToken = _assetToERC20Token(asset);
         if (storedToken.tokenAddress != token) revert InventoryErrors.UnmatchingTokenAddress();
         if (storedToken.amount < amount) revert InventoryErrors.WithdrawOverflow();
@@ -116,7 +117,7 @@ contract InventoryInitERC20 is
             asset._updateAsset(data);
         } else {
             emit AssetRemoved(id);
-            _assets._removeAsset(index);
+            _assetsSet._removeAsset(index);
         }
 
         IERC20(token).transfer(recipient, amount);
@@ -128,7 +129,7 @@ contract InventoryInitERC20 is
         return abi.decode(asset.data, (ERC20Struct));
     }
 
-    function _assetsListToERC20(Asset[] memory assets) internal pure returns (ERC20Struct[] memory) {
+    function _assetsSetListToERC20(Asset[] memory assets) internal pure returns (ERC20Struct[] memory) {
         uint256 tokensLength = 0;
         uint256 assetsLength = assets.length;
 

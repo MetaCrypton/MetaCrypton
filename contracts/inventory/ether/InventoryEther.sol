@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Copyright Anton "BaldyAsh" Grigorev
 pragma solidity ^0.8.0;
 
 import "./InventoryEtherUpgrade.sol";
@@ -9,12 +10,12 @@ import "../InventoryStorage.sol";
 import "../interfaces/IInventoryEtherInternal.sol";
 import "../interfaces/IInventoryEther.sol";
 import "../interfaces/IInventory.sol";
-import "../interfaces/IInventoryAssetsEvents.sol";
+import "../interfaces/IInventoryEvents.sol";
 import "../../common/interfaces/IERC165.sol";
 
 contract InventoryEther is
     IInventoryEther,
-    IInventoryAssetsEvents,
+    IInventoryEvents,
     InventoryEtherUpgrade,
     InventoryInitOwnership
 {
@@ -45,10 +46,10 @@ contract InventoryEther is
     
     function getEtherBalance() external view override returns (uint256) {
         uint256 id = _getEtherId();
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _assets._getAssetByIndex(index);
+        Asset storage asset = _assetsSet._getAssetByIndex(index);
         EtherStruct memory storedEther = _assetToEther(asset);
 
         return storedEther.amount;
@@ -58,7 +59,7 @@ contract InventoryEther is
         emit DepositEther(msg.sender, amount);
 
         uint256 id = _getEtherId();
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
 
         if (index == 0) {
             bytes memory data = abi.encode(EtherStruct(amount));
@@ -67,9 +68,9 @@ contract InventoryEther is
                 AssetType.Ether,
                 data
             );
-            _assets._addAsset(id, AssetType.Ether, data);
+            _assetsSet._addAsset(id, AssetType.Ether, data);
         } else {
-            Asset storage asset = _assets._getAssetByIndex(index);
+            Asset storage asset = _assetsSet._getAssetByIndex(index);
             EtherStruct memory storedEther = _assetToEther(asset);
             if (type(uint256).max - storedEther.amount < amount) revert InventoryErrors.DepositOverflow();
             storedEther.amount += amount;
@@ -84,10 +85,10 @@ contract InventoryEther is
         emit WithdrawEther(recipient, amount);
 
         uint256 id = _getEtherId();
-        uint256 index = _assets._getAssetIndexById(id);
+        uint256 index = _assetsSet._getAssetIndexById(id);
         if (index == 0) revert InventoryErrors.UnexistingAsset();
 
-        Asset storage asset = _assets._getAssetByIndex(index);
+        Asset storage asset = _assetsSet._getAssetByIndex(index);
         EtherStruct memory storedEther = _assetToEther(asset);
         if (storedEther.amount < amount) revert InventoryErrors.WithdrawOverflow();
 
@@ -98,7 +99,7 @@ contract InventoryEther is
             asset._updateAsset(data);
         } else {
             emit AssetRemoved(id);
-            _assets._removeAsset(index);
+            _assetsSet._removeAsset(index);
         }
 
         (bool success, ) = recipient.call{value: amount}("");

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Copyright Anton "BaldyAsh" Grigorev
 pragma solidity >=0.8.0 <0.9.0;
 
 import "../interfaces/IERC165.sol";

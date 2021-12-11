@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: MIT
+// Copyright Anton "BaldyAsh" Grigorev
 pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitCommon.sol";
+import "../interfaces/IUpgradesRegistryEvents.sol";
 import "../interfaces/IUpgradesRegistryUpgrades.sol";
 import "../../common/governance/Governable.sol";
 
 contract UpgradesRegistryInitUpgrades is
+    IUpgradesRegistryEvents,
     IUpgradesRegistryUpgrades,
     Governable,
     UpgradesRegistryInitCommon
