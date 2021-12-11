@@ -13,7 +13,7 @@ interface IERC721Burnable {
     /**
      * @dev Emitted when `tokenId` token is burned.
      */
-    event Burn(uint256 tokenId);
+    event Burn(uint256 indexed tokenId);
 
     /**
      * @dev Burns `tokenId`. See {ERC721-_burn}.

@@ -165,7 +165,9 @@ library NFTInitCommon {
         inventory = address(new InventoryProxy(inventorySetup));
         tokenId = _addressToTokenId(inventory);
 
-        IInitializable(inventory).initialize(abi.encode(address(this), tokenId, upgradesRegistry));
+        IInitializable(inventory).initialize(
+            abi.encode(address(this), tokenId, upgradesRegistry)
+        );
 
         IUpgradesRegistry(upgradesRegistry).registerProxy(inventory);
 

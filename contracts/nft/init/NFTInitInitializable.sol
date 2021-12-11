@@ -21,7 +21,11 @@ contract NFTInitInitializable is
     error EmptyInventorySetup();
 
     function initialize(bytes memory input) public override (IInitializable, Initializable) {
-        (address governance, address upgradesRegistry, address inventorySetup) = abi.decode(input, (address, address, address));
+        (
+            address governance,
+            address upgradesRegistry,
+            address inventorySetup
+        ) = abi.decode(input, (address, address, address));
         if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
         if (inventorySetup == address(0x00)) revert EmptyInventorySetup();
