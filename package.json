@@ -1,13 +1,13 @@
 {
-  "name": "metacartelsmartcontracts",
+  "name": "MetaCrypton",
   "version": "1.0.0",
-  "description": "NFT inventory",
+  "description": "Meta NFT constructor",
   "scripts": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BaldyAsh/MetaCartelSmartContracts.git"
+    "url": "git+https://github.com/BaldyAsh/MetaCrypton.git"
   },
   "keywords": [
     "NFT",
@@ -16,11 +16,11 @@
     "Meta"
   ],
   "author": "Anton Grigorev aka BaldyAsh",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/BaldyAsh/MetaCartelSmartContracts/issues"
+    "url": "https://github.com/BaldyAsh/MetaCrypton/issues"
   },
-  "homepage": "https://github.com/BaldyAsh/MetaCartelSmartContracts#readme",
+  "homepage": "https://github.com/BaldyAsh/MetaCrypton#readme",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",

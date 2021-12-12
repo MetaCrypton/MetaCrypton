@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Modified copyright Anton "BaldyAsh" Grigorev
+// Modified copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 // Original copyright OpenZeppelin Contracts v4.4.0 (token/ERC721/extensions/IERC721Enumerable.sol)
 
 pragma solidity ^0.8.0;
