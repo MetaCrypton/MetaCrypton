@@ -50,4 +50,21 @@ describe("Upgrades registry", function() {
 
         await testInitializable.initialize(coder.encode(["address", "address"], [admin.address, upgradesRegistry.address]));
     });
+
+    it("Register test proxy in Upgrades Registry and upgrade it", async function() {
+        await upgradesRegistry.registerProxy(test.address);
+
+        assert.equal(await upgradesRegistry.isProxyRegistered(test.address), true);
+        assert.equal(await upgradesRegistry.isProxyRegistered(test2.address), false);
+
+        await upgradesRegistry.registerUpgrade(test2.address);
+
+        assert.deepEqual(await upgradesRegistry.getProxyCurrentUpgrades(test.address), []);
+        assert.equal(await upgradesRegistry.getProxyMaxPossibleUpgradeIndex(
+            await testUpgrade.getProxyId()
+        ), 0);
+
+        await testUpgradable.upgrade(0);
+        assert.deepEqual(await upgradesRegistry.getProxyCurrentUpgrades(test.address), [ethers.BigNumber.from(0)]);
+    });
 });

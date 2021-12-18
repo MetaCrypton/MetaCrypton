@@ -32,10 +32,8 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
         StoredProxy storage proxy = _proxies[proxyAddress];
 
         _verifyUnexistingProxy(proxy);
-        _verifyProxyHasUpgrades(proxyId);
 
-        uint256[] memory currentUpgradesList = new uint256[](1);
-        currentUpgradesList[0] = 0;
+        uint256[] memory currentUpgradesList = new uint256[](0);
 
         proxy.proxyId = proxyId;
         proxy.currentUpgradesList = currentUpgradesList;
@@ -100,10 +98,6 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
 
     function _verifyUnexistingProxy(StoredProxy storage proxy) internal view {
         if (proxy.proxyId != bytes32(0x00)) revert UpgradesRegistryInitErrors.ExistingProxy();
-    }
-
-    function _verifyProxyHasUpgrades(bytes32 proxyId) internal view {
-        if (_upgrades[proxyId].upgradesAddresses.length == 0) revert UpgradesRegistryInitErrors.UnexistingInitUpgrade();
     }
 
     function _verifyExistingUpgrade(Upgrades storage upgrades, uint256 upgradeIndex) internal view {
