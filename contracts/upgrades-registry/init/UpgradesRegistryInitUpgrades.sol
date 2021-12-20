@@ -13,7 +13,7 @@ contract UpgradesRegistryInitUpgrades is
     Governable,
     UpgradesRegistryInitCommon
 {
-    function registerUpgrade(address upgradeAddress) external override isGovernance {
+    function registerUpgrade(address upgradeAddress) external override requestPermission {
         (bytes32 proxyId, uint256 upgradeIndex) = _registerUpgrade(upgradeAddress);
 
         emit UpgradeRegistered(proxyId, upgradeAddress, upgradeIndex);

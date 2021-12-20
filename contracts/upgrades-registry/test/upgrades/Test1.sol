@@ -23,7 +23,7 @@ contract Test1 is
 {
     error EmptyUpgradesRegistry();
 
-    function upgrade(uint256 upgradeIndex) external override isGovernance {
+    function upgrade(uint256 upgradeIndex) external override requestPermission {
         address upgradeAddress = IUpgradesRegistry(_upgradesRegistry).upgradeProxy(upgradeIndex);
         _methods[IUpgrade(address(0x00)).applyUpgrade.selector] = upgradeAddress;
         IUpgrade(address(this)).applyUpgrade();

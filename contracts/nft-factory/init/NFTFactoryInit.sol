@@ -23,7 +23,7 @@ contract NFTFactoryInit is
         string calldata symbol,
         string calldata baseURI,
         address governance
-    ) external override isGovernance returns (address) {
+    ) external override requestPermission returns (address) {
         if (_registeredTokens[_tokenBySymbol[symbol]].token != address(0x00)) revert NFTFactoryErrors.ExistingToken();
 
         address token = address(new NFTProxy(name, symbol, baseURI, _nftSetup));

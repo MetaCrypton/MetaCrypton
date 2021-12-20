@@ -12,7 +12,7 @@ contract UpgradesRegistryInitUpgradable is
     Governable,
     UpgradesRegistryInitCommon
 {
-    function upgrade(uint256 upgradeIndex) external override isGovernance {
+    function upgrade(uint256 upgradeIndex) external override requestPermission {
         address upgradeAddress = _upgradeProxy(address(this), upgradeIndex);
         bytes4 selector = IUpgrade(address(0x00)).applyUpgrade.selector;
 

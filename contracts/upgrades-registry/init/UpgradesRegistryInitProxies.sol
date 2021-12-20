@@ -13,7 +13,7 @@ contract UpgradesRegistryInitProxies is
     Governable,
     UpgradesRegistryInitCommon
 {
-    function registerProxy(address proxyAddress) external override isGovernance {
+    function registerProxy(address proxyAddress) external override requestPermission {
         bytes32 proxyId = _registerProxy(proxyAddress);
 
         emit ProxyRegistered(proxyId, proxyAddress);
