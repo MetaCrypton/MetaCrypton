@@ -22,13 +22,14 @@ contract NFTFactoryInit is
         string calldata name,
         string calldata symbol,
         string calldata baseURI,
-        address governance
+        address governance,
+        uint256[] calldata inventoryUpgrades
     ) external override requestPermission returns (address) {
         if (_tokenBySymbol[symbol] != 0) revert NFTFactoryErrors.ExistingToken();
 
         address token = address(new NFTProxy(name, symbol, baseURI, _nftSetup));
         IInitializable(token).initialize(
-            abi.encode(governance, _upgradesRegistry, _inventorySetup)
+            abi.encode(governance, _upgradesRegistry, _inventorySetup, inventoryUpgrades)
         );
         IUpgradesRegistry(_upgradesRegistry).registerProxy(token);
 

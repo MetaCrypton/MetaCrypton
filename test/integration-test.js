@@ -96,7 +96,8 @@ describe("Integration", function() {
             "Token name",
             "TKN",
             "uri",
-            admin.address
+            admin.address,
+            [0]
         );
         const result = await tx.wait();
         const eventArgs = getIndexedEventArgs(

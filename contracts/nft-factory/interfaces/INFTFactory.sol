@@ -9,7 +9,8 @@ interface INFTFactory {
         string calldata name,
         string calldata symbol,
         string calldata baseURI,
-        address governance
+        address governance,
+        uint256[] calldata inventoryUpgrades
     ) external returns (address);
 
     function getTokens(uint256 startIndex, uint256 number) external view returns (NFTToken[] memory);

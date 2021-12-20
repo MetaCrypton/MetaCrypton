@@ -24,14 +24,16 @@ contract NFTInitInitializable is
         (
             address governance,
             address upgradesRegistry,
-            address inventorySetup
-        ) = abi.decode(input, (address, address, address));
+            address inventorySetup,
+            uint256[] memory inventoryUpgrades
+        ) = abi.decode(input, (address, address, address, uint256[]));
         if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
         if (inventorySetup == address(0x00)) revert EmptyInventorySetup();
         _governance = governance;
         _upgradesRegistry = upgradesRegistry;
         _inventorySetup = inventorySetup;
+        _inventoryUpgrades = inventoryUpgrades;
         
         _storeMethods(_methods[msg.sig]);
 

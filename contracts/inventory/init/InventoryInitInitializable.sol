@@ -23,6 +23,7 @@ contract InventoryInitInitializable is
         (address nftAddress, uint256 nftId, address upgradesRegistry) = abi.decode(input, (address, uint256, address));
         if (nftAddress == address(0x00)) revert EmptyNftAddress();
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
+        _governance = nftAddress;
         _nftAddress = nftAddress;
         _nftId = nftId;
         _upgradesRegistry = upgradesRegistry;

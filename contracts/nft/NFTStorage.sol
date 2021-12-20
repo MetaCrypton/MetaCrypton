@@ -17,6 +17,8 @@ contract NFTStorage is ProxyStorage, GovernableStorage {
     
     address internal _inventorySetup;
 
+    uint256[] internal _inventoryUpgrades;
+
     // Tokens set
     TokensSet internal _tokensSet;
 }

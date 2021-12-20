@@ -8,15 +8,24 @@ import "../../inventory/InventoryProxy.sol";
 import "../../upgrades-registry/interfaces/IUpgradesRegistry.sol";
 import "../../common/interfaces/IERC721Receiver.sol";
 import "../../common/libs/AddressUtils.sol";
+import "../../common/upgradability/IUpgradable.sol";
 
 library NFTInitCommon {
     function _safeMint(
         TokensSet storage tokensSet,
         address upgradesRegistry,
         address inventorySetup,
-        address to
+        address to,
+        uint256[] memory inventoryUpgrades
     ) internal returns (uint256 tokenId) {
-        return _safeMint(tokensSet, upgradesRegistry, inventorySetup, to, "");
+        return _safeMint(
+            tokensSet,
+            upgradesRegistry,
+            inventorySetup,
+            to,
+            "",
+            inventoryUpgrades
+        );
     }
 
     function _safeMint(
@@ -24,9 +33,16 @@ library NFTInitCommon {
         address upgradesRegistry,
         address inventorySetup,
         address to,
-        bytes memory data
+        bytes memory data,
+        uint256[] memory inventoryUpgrades
     ) internal returns (uint256 tokenId) {
-        tokenId = _mint(tokensSet, upgradesRegistry, inventorySetup, to);
+        tokenId = _mint(
+            tokensSet,
+            upgradesRegistry,
+            inventorySetup,
+            to,
+            inventoryUpgrades
+        );
         if (!_checkOnERC721Received(address(0x00), to, tokenId, data)) revert NFTErrors.TransferToNonERC721ReceiverImplementer();
         
         return tokenId;
@@ -36,10 +52,15 @@ library NFTInitCommon {
         TokensSet storage tokensSet,
         address upgradesRegistry,
         address inventorySetup,
-        address to
+        address to,
+        uint256[] memory inventoryUpgrades
     ) internal returns (uint256 tokenId) {
         address inventory;
-        (inventory, tokenId)  = _deployInventory(upgradesRegistry, inventorySetup);
+        (inventory, tokenId)  = _deployInventory(
+            upgradesRegistry,
+            inventorySetup,
+            inventoryUpgrades
+        );
         uint256 index = _idToTokenIndex(tokensSet, tokenId);
         if (index > 0) revert NFTErrors.ExistingToken();
 
@@ -161,7 +182,11 @@ library NFTInitCommon {
         tokensSet.operatorApprovals[owner][operator] = approved;
     }
 
-    function _deployInventory(address upgradesRegistry, address inventorySetup) internal returns (address inventory, uint256 tokenId) {
+    function _deployInventory(
+        address upgradesRegistry,
+        address inventorySetup,
+        uint256[] memory inventoryUpgrades
+    ) internal returns (address inventory, uint256 tokenId) {
         inventory = address(new InventoryProxy(inventorySetup));
         tokenId = _addressToTokenId(inventory);
 
@@ -170,6 +195,11 @@ library NFTInitCommon {
         );
 
         IUpgradesRegistry(upgradesRegistry).registerProxy(inventory);
+
+        uint upgradesLen = inventoryUpgrades.length;
+        for (uint i = 0; i < upgradesLen; i++) {
+            IUpgradable(inventory).upgrade(inventoryUpgrades[i]);
+        }
 
         return (inventory, tokenId);
     }

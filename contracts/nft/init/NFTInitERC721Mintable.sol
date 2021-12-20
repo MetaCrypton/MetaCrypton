@@ -32,7 +32,8 @@ contract NFTInitERC721Mintable is
         uint256 tokenId = _tokensSet._mint(
             _upgradesRegistry,
             _inventorySetup,
-            owner
+            owner,
+            _inventoryUpgrades
         );
 
         emit Transfer(address(0x00), owner, tokenId);
@@ -49,7 +50,8 @@ contract NFTInitERC721Mintable is
         uint256 tokenId = _tokensSet._safeMint(
             _upgradesRegistry,
             _inventorySetup,
-            owner
+            owner,
+            _inventoryUpgrades
         );
 
         emit Transfer(address(0x00), owner, tokenId);
@@ -67,7 +69,8 @@ contract NFTInitERC721Mintable is
             _upgradesRegistry,
             _inventorySetup,
             owner,
-            data
+            data,
+            _inventoryUpgrades
         );
 
         emit Transfer(address(0x00), owner, tokenId);
