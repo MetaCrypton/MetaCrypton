@@ -24,7 +24,7 @@ contract NFTFactoryInit is
         string calldata baseURI,
         address governance
     ) external override requestPermission returns (address) {
-        if (_registeredTokens[_tokenBySymbol[symbol]].token != address(0x00)) revert NFTFactoryErrors.ExistingToken();
+        if (_tokenBySymbol[symbol] != 0) revert NFTFactoryErrors.ExistingToken();
 
         address token = address(new NFTProxy(name, symbol, baseURI, _nftSetup));
         IInitializable(token).initialize(
@@ -32,16 +32,16 @@ contract NFTFactoryInit is
         );
         IUpgradesRegistry(_upgradesRegistry).registerProxy(token);
 
-        uint256 id = _registeredTokens.length;
-        _tokenBySymbol[symbol] = id;
-        _tokenByAddress[token] = id;
-        _tokensByGovernance[governance].push(id);
-
         _registeredTokens.push(NFTToken(
             token,
             governance,
             symbol
         ));
+
+        uint256 id = _registeredTokens.length;
+        _tokenBySymbol[symbol] = id;
+        _tokenByAddress[token] = id;
+        _tokensByGovernance[governance].push(id);
 
         emit TokenDeployed(
             name,
@@ -74,11 +74,15 @@ contract NFTFactoryInit is
     }
 
     function getTokenByAddress(address token) external view override returns (NFTToken memory) {
-        return _registeredTokens[_tokenByAddress[token]];
+        uint index = _tokenByAddress[token];
+        if (index == 0) revert NFTFactoryErrors.UnexistingToken();
+        return _registeredTokens[index - 1];
     }
 
     function getTokenBySymbol(string calldata symbol) external view override returns (NFTToken memory) {
-        return _registeredTokens[_tokenBySymbol[symbol]];
+        uint index = _tokenBySymbol[symbol];
+        if (index == 0) revert NFTFactoryErrors.UnexistingToken();
+        return _registeredTokens[index - 1];
     }
 
     function getTokensByGovernance(address governance, uint256 startIndex, uint256 number) external view override returns (NFTToken[] memory) {

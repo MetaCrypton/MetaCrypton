@@ -15,12 +15,38 @@ describe("Integration", function() {
     let inventoryInit;
     let inventoryEther;
 
+    let nftFactoryProxy;
+    let nftFactoryUpgrade;
+    let nftFactoryUpgradable;
+
     let governance;
+
+    let nft;
 
     async function deploy(contractName, ...args) {
         const Factory = await ethers.getContractFactory(contractName, admin)
         const instance = await Factory.deploy(...args)
         return instance.deployed()
+    }
+
+    function getIndexedEventArgs(tx, eventSignature, eventNotIndexedParams) {
+        const sig = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(eventSignature));
+        const log = getLogByFirstTopic(tx, sig);
+        return coder.decode(
+            eventNotIndexedParams,
+            log.data
+        );
+    }
+
+    function getLogByFirstTopic(tx, firstTopic) {
+        const logs = tx.events;
+    
+        for(let i = 0; i < logs.length; i++) {
+            if(logs[i].topics[0] === firstTopic){
+                return logs[i];
+            }
+        }
+        return null;
     }
 
     it("Deploy Governance", async function() {
@@ -49,24 +75,37 @@ describe("Integration", function() {
         await upgradesRegistry.registerUpgrade(inventoryEther.address);
     });
 
-    it("Deploy nft proxy and upgrades", async function() {
+    it("Deploy nft setup and factory", async function() {
         const nftInit = await deploy("NFTInit");
-        const nftProxy = await deploy("NFTProxy",
-            "NFT",
-            "NFT",
-            "uri",
-            nftInit.address
-        );
+        const nftFactoryInit = await deploy("NFTFactoryInit");
+        nftFactoryProxy = await deploy("NFTFactoryProxy", nftFactoryInit.address);
 
-        const nftInitializable = await ethers.getContractAt("IInitializable", nftProxy.address);
-        nftUpgrade = await ethers.getContractAt("IUpgrade", nftProxy.address);
-        nftUpgradable = await ethers.getContractAt("IUpgradable", nftProxy.address);
-        nft = await ethers.getContractAt("INFT", nftProxy.address);
+        const nftFactoryInitializable = await ethers.getContractAt("IInitializable", nftFactoryProxy.address);
+        nftFactoryUpgrade = await ethers.getContractAt("IUpgrade", nftFactoryProxy.address);
+        nftFactoryUpgradable = await ethers.getContractAt("IUpgradable", nftFactoryProxy.address);
+        nftFactory = await ethers.getContractAt("INFTFactory", nftFactoryProxy.address);
 
-        await nftInitializable.initialize(coder.encode(
-            ["address", "address", "address"],
-            [admin.address, upgradesRegistry.address, inventoryInit.address]
+        await nftFactoryInitializable.initialize(coder.encode(
+            ["address", "address", "address", "address"],
+            [admin.address, upgradesRegistry.address, nftInit.address, inventoryInit.address]
         ));
+    });
+
+    it("Deploy nft contract", async function() {
+        const tx = await nftFactory.deployToken(
+            "Token name",
+            "TKN",
+            "uri",
+            admin.address
+        );
+        const result = await tx.wait();
+        const eventArgs = getIndexedEventArgs(
+            result,
+            "TokenDeployed(string,string,string,address,address)",
+            ["string", "string", "string", "address", "address"],
+        );
+        const nftAddress = eventArgs[4];
+        nft = await ethers.getContractAt("INFT", nftAddress);
     });
 
     it("Mint nft", async function() {

@@ -5,4 +5,5 @@ pragma solidity ^0.8.0;
 library NFTFactoryErrors {
     error WrongEndIndex();
     error ExistingToken();
+    error UnexistingToken();
 }
