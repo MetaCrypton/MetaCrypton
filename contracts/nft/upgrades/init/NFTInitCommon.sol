@@ -226,7 +226,7 @@ library NFTInitCommon {
 
     function _safeGetToken(TokensSet storage tokensSet, uint256 tokenId) internal view returns (Token storage) {
         uint256 index = _safeGetTokenIndex(tokensSet, tokenId);
-        return tokensSet.tokens[index];
+        return tokensSet.tokens[index - 1];
     }
 
     function _safeGetTokenIndex(TokensSet storage tokensSet, uint256 tokenId) internal view returns (uint256) {

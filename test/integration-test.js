@@ -13,7 +13,6 @@ describe("Integration", function() {
     let upgradesRegistryUpgradable;
 
     let inventoryInit;
-    let inventoryEther;
 
     let nftFactoryProxy;
     let nftFactoryUpgrade;
@@ -23,19 +22,27 @@ describe("Integration", function() {
 
     let nft;
 
+    let erc721;
+
     async function deploy(contractName, ...args) {
         const Factory = await ethers.getContractFactory(contractName, admin)
         const instance = await Factory.deploy(...args)
         return instance.deployed()
     }
 
-    function getIndexedEventArgs(tx, eventSignature, eventNotIndexedParams) {
+    function getIndexedEventArgsRAW(tx, eventSignature, eventNotIndexedParams) {
         const sig = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(eventSignature));
         const log = getLogByFirstTopic(tx, sig);
         return coder.decode(
             eventNotIndexedParams,
             log.data
         );
+    }
+
+    function getIndexedEventArgs(tx, eventSignature, topic) {
+        const sig = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(eventSignature));
+        const log = getLogByFirstTopic(tx, sig);
+        return log.args[topic];
     }
 
     function getLogByFirstTopic(tx, firstTopic) {
@@ -51,6 +58,10 @@ describe("Integration", function() {
 
     it("Deploy Governance", async function() {
         governance = await deploy("Governance");
+    });
+
+    it("Deploy erc721", async function() {
+        erc721 = await deploy("ERC721", "Loot", "LOOT");
     });
 
     it("Deploy Upgrades Registry", async function() {
@@ -70,9 +81,11 @@ describe("Integration", function() {
 
     it("Deploy inventory upgrades and register in Upgrades registry", async function() {
         inventoryInit = await deploy("InventoryInit");
-        inventoryEther = await deploy("InventoryEther");
+        const inventoryEther = await deploy("InventoryEther");
+        const inventoryLootbox = await deploy("InventoryLootbox");
 
         await upgradesRegistry.registerUpgrade(inventoryEther.address);
+        await upgradesRegistry.registerUpgrade(inventoryLootbox.address);
     });
 
     it("Deploy nft setup and factory", async function() {
@@ -101,10 +114,10 @@ describe("Integration", function() {
             "uri",
             admin.address,
             [0],
-            [0]
+            [0, 1]
         );
         const result = await tx.wait();
-        const eventArgs = getIndexedEventArgs(
+        const eventArgs = getIndexedEventArgsRAW(
             result,
             "TokenDeployed(string,string,string,address,address)",
             ["string", "string", "string", "address", "address"],
@@ -113,7 +126,29 @@ describe("Integration", function() {
         nft = await ethers.getContractAt("INFT", nftAddress);
     });
 
-    it("Mint nft", async function() {
-        await nft.mint(admin.address);
+    it("Set lootbox, mint nft, reveal lootbox", async function() {
+        const nftLootbox = await ethers.getContractAt("INFTLootbox", nft.address);
+        await nftLootbox.setLootNFT(erc721.address);
+
+        const tx = await nft.mint(admin.address);
+        const result = await tx.wait();
+        const tokenId = getIndexedEventArgs(
+            result,
+            "Transfer(address,address,uint256)",
+            2,
+        );
+
+        const inventoryAddress = await nft.inventoryOf(tokenId.toHexString());
+
+        const inventoryLootbox = await ethers.getContractAt("IInventoryLootbox", inventoryAddress);
+        await inventoryLootbox.reveal();
+
+        const inventory = await ethers.getContractAt("IInventory", inventoryAddress);
+        const tokens = await inventory.getERC721s(0, 3);
+        assert.equal(tokens.length, 3);
+
+        assert.equal(await erc721.ownerOf(tokens[0][1].toHexString()), inventory.address);
+        assert.equal(await erc721.ownerOf(tokens[1][1].toHexString()), inventory.address);
+        assert.equal(await erc721.ownerOf(tokens[2][1].toHexString()), inventory.address);
     });
 });

@@ -33,7 +33,7 @@ library InventoryInitAssets {
 
     function _getAssets(AssetsSet storage assets, uint256 startIndex, uint256 number) internal view returns (Asset[] memory) {
         uint256 endIndex = startIndex + number;
-        if (endIndex >= assets.assets.length) revert InventoryErrors.WrongEndIndex();
+        if (endIndex > assets.assets.length) revert InventoryErrors.WrongEndIndex();
         
         Asset[] memory assetsToReturn = new Asset[](number);
         for (uint256 i = startIndex; i < endIndex; i++) {
