@@ -15,7 +15,7 @@ interface IERC721Mintable {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function mint(address owner) external;
+    function mint(address owner) external returns (uint256 tokenId);
 
     /**
      * @dev Mints `tokenId`. See {ERC721-_safeMint}.
@@ -24,7 +24,7 @@ interface IERC721Mintable {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function safeMint(address owner) external;
+    function safeMint(address owner) external returns (uint256 tokenId);
 
     /**
      * @dev Mints `tokenId`. See {ERC721-_safeMint}.
@@ -33,5 +33,5 @@ interface IERC721Mintable {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function safeMint(address owner, bytes calldata data) external;
+    function safeMint(address owner, bytes calldata data) external returns (uint256 tokenId);
 }

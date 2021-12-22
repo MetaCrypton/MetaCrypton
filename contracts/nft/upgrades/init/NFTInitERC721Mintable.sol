@@ -28,8 +28,8 @@ contract NFTInitERC721Mintable is
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function mint(address owner) external override requestPermission {
-        uint256 tokenId = _tokensSet._mint(
+    function mint(address owner) external override requestPermission returns (uint256 tokenId) {
+        tokenId = _tokensSet._mint(
             _upgradesRegistry,
             _inventorySetup,
             owner,
@@ -37,6 +37,8 @@ contract NFTInitERC721Mintable is
         );
 
         emit Transfer(address(0x00), owner, tokenId);
+
+        return tokenId;
     }
 
     /**
@@ -46,8 +48,8 @@ contract NFTInitERC721Mintable is
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function safeMint(address owner) external override requestPermission {
-        uint256 tokenId = _tokensSet._safeMint(
+    function safeMint(address owner) external override requestPermission returns (uint256 tokenId) {
+        tokenId = _tokensSet._safeMint(
             _upgradesRegistry,
             _inventorySetup,
             owner,
@@ -55,6 +57,8 @@ contract NFTInitERC721Mintable is
         );
 
         emit Transfer(address(0x00), owner, tokenId);
+
+        return tokenId;
     }
 
     /**
@@ -64,8 +68,8 @@ contract NFTInitERC721Mintable is
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function safeMint(address owner, bytes calldata data) external override requestPermission {
-        uint256 tokenId = _tokensSet._safeMint(
+    function safeMint(address owner, bytes calldata data) external override requestPermission returns (uint256 tokenId) {
+        tokenId = _tokensSet._safeMint(
             _upgradesRegistry,
             _inventorySetup,
             owner,
@@ -74,5 +78,7 @@ contract NFTInitERC721Mintable is
         );
 
         emit Transfer(address(0x00), owner, tokenId);
+
+        return tokenId;
     }
 }

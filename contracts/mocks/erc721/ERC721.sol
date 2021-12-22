@@ -57,11 +57,12 @@ contract ERC721 is IERC165, IERC721, IERC721Mintable, IERC721Metadata {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function mint(address owner) external override {
+    function mint(address owner) external override returns (uint256 tokenId) {
         _mint(
             owner,
-            _tokenIdCounter++
+            _tokenIdCounter
         );
+        return _tokenIdCounter++;
     }
 
     /**
@@ -71,11 +72,12 @@ contract ERC721 is IERC165, IERC721, IERC721Mintable, IERC721Metadata {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function safeMint(address owner) external override {
+    function safeMint(address owner) external override returns (uint256 tokenId) {
         _safeMint(
             owner,
-            _tokenIdCounter++
+            _tokenIdCounter
         );
+        return _tokenIdCounter++;
     }
 
     /**
@@ -85,12 +87,13 @@ contract ERC721 is IERC165, IERC721, IERC721Mintable, IERC721Metadata {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function safeMint(address owner, bytes calldata data) external override {
+    function safeMint(address owner, bytes calldata data) external override returns (uint256 tokenId) {
         _safeMint(
             owner,
-            _tokenIdCounter++,
+            _tokenIdCounter,
             data
         );
+        return _tokenIdCounter++;
     }
 
     /**

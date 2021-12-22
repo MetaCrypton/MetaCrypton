@@ -2,8 +2,6 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-library GovernableErrors {
-    error EmptyGovernance();
-    error SameGovernance();
-    error NoPermission();
+interface IGovernable {
+    function setGovernance(address governance) external;
 }

@@ -6,13 +6,14 @@ import "./NFTFactoryInitInitializable.sol";
 import "./NFTFactoryInitUpgradable.sol";
 import "./NFTFactoryInitUpgrade.sol";
 import "../../NFTFactoryErrors.sol";
-import "../../interfaces/INFTFactory.sol";
+import "../../interfaces/INFTFactoryTokens.sol";
 import "../../interfaces/INFTFactoryEvents.sol";
 import "../../../upgrades-registry/interfaces/IUpgradesRegistry.sol";
 import "../../../nft/NFTProxy.sol";
+import "../../../common/governance/interfaces/IGovernable.sol";
 
 contract NFTFactoryInit is
-    INFTFactory,
+    INFTFactoryTokens,
     INFTFactoryEvents,
     NFTFactoryInitInitializable,
     NFTFactoryInitUpgradable,
@@ -23,26 +24,23 @@ contract NFTFactoryInit is
         string calldata symbol,
         string calldata baseURI,
         address governance,
+        uint256[] calldata nftUpgrades,
         uint256[] calldata inventoryUpgrades
     ) external override requestPermission returns (address) {
         if (_tokenBySymbol[symbol] != 0) revert NFTFactoryErrors.ExistingToken();
 
         address token = address(new NFTProxy(name, symbol, baseURI, _nftSetup));
-        IInitializable(token).initialize(
-            abi.encode(governance, _upgradesRegistry, _inventorySetup, inventoryUpgrades)
-        );
-        IUpgradesRegistry(_upgradesRegistry).registerProxy(token);
+
+        uint256 id = _registeredTokens.length;
+        _tokenBySymbol[symbol] = id;
+        _tokenByAddress[token] = id;
+        _tokensByGovernance[governance].push(id);
 
         _registeredTokens.push(NFTToken(
             token,
             governance,
             symbol
         ));
-
-        uint256 id = _registeredTokens.length;
-        _tokenBySymbol[symbol] = id;
-        _tokenByAddress[token] = id;
-        _tokensByGovernance[governance].push(id);
 
         emit TokenDeployed(
             name,
@@ -51,6 +49,18 @@ contract NFTFactoryInit is
             governance,
             token
         );
+
+        IInitializable(token).initialize(
+            abi.encode(address(this), _upgradesRegistry, _inventorySetup, inventoryUpgrades)
+        );
+        IUpgradesRegistry(_upgradesRegistry).registerProxy(token);
+
+        uint upgradesLen = nftUpgrades.length;
+        for (uint i = 0; i < upgradesLen; i++) {
+            IUpgradable(token).upgrade(nftUpgrades[i]);
+        }
+
+        IGovernable(token).setGovernance(governance);
 
         return token;
     }

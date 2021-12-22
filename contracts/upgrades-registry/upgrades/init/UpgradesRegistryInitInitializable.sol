@@ -27,6 +27,8 @@ contract UpgradesRegistryInitInitializable is
     }
 
     function _storeMethods(address upgradeAddress) internal {
+        _methods[IUpgradesRegistry(address(0x00)).setGovernance.selector] = upgradeAddress;
+
         _methods[IUpgradesRegistry(address(0x00)).registerProxy.selector] = upgradeAddress;
         _methods[IUpgradesRegistry(address(0x00)).getProxyId.selector] = upgradeAddress;
         _methods[IUpgradesRegistry(address(0x00)).isProxyRegistered.selector] = upgradeAddress;

@@ -77,6 +77,9 @@ describe("Integration", function() {
 
     it("Deploy nft setup and factory", async function() {
         const nftInit = await deploy("NFTInit");
+        const nftLootbox = await deploy("NFTLootbox");
+        await upgradesRegistry.registerUpgrade(nftLootbox.address);
+
         const nftFactoryInit = await deploy("NFTFactoryInit");
         nftFactoryProxy = await deploy("NFTFactoryProxy", nftFactoryInit.address);
 
@@ -97,6 +100,7 @@ describe("Integration", function() {
             "TKN",
             "uri",
             admin.address,
+            [0],
             [0]
         );
         const result = await tx.wait();

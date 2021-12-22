@@ -41,6 +41,8 @@ contract NFTInitInitializable is
     }
 
     function _storeMethods(address upgradeAddress) internal {
+        _methods[INFT(address(0x00)).setGovernance.selector] = upgradeAddress;
+
         _methods[INFT(address(0x00)).transferFrom.selector] = upgradeAddress;
         _methods[bytes4(keccak256("safeTransferFrom(address,address,uint256)"))] = upgradeAddress;
         _methods[bytes4(keccak256("safeTransferFrom(address,address,uint256,bytes)"))] = upgradeAddress;

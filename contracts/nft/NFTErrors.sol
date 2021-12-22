@@ -15,4 +15,6 @@ library NFTErrors {
     error IndexOutOfBounds();
     error RecipientIsZero();
     error BurnNotFromOwnerNorApproved();
+    error EmptyLootNFT();
+    error SameLootNFT();
 }

@@ -43,6 +43,8 @@ contract NFTFactoryInitInitializable is
     }
 
     function _storeMethods(address upgradeAddress) internal {
+        _methods[INFTFactory(address(0x00)).setGovernance.selector] = upgradeAddress;
+
         _methods[INFTFactory(address(0x00)).deployToken.selector] = upgradeAddress;
         _methods[INFTFactory(address(0x00)).getTokens.selector] = upgradeAddress;
         _methods[INFTFactory(address(0x00)).getTokensTotal.selector] = upgradeAddress;
