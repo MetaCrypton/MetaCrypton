@@ -149,51 +149,51 @@ library InventoryEternalStorageCommon {
         delete eternalStorage.bytesArrays[key];
     }
 
-    function _getUint(EternalStorage storage eternalStorage, bytes32 key) public view returns (uint) {
+    function _getUint(EternalStorage storage eternalStorage, bytes32 key) internal view returns (uint) {
         return eternalStorage.uints[key];
     }
 
-    function getInt(EternalStorage storage eternalStorage, bytes32 key) public view returns (int) {
+    function _getInt(EternalStorage storage eternalStorage, bytes32 key) internal view returns (int) {
         return eternalStorage.ints[key];
     }
 
-    function getAddress(EternalStorage storage eternalStorage, bytes32 key) public view returns (address) {
+    function _getAddress(EternalStorage storage eternalStorage, bytes32 key) internal view returns (address) {
         return eternalStorage.addresses[key];
     }
 
-    function getBytes32(EternalStorage storage eternalStorage, bytes32 key) public view returns (bytes32) {
+    function _getBytes32(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bytes32) {
         return eternalStorage.bytes32s[key];
     }
 
-    function getBool(EternalStorage storage eternalStorage, bytes32 key) public view returns (bool) {
+    function _getBool(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bool) {
         return eternalStorage.bools[key];
     }
 
-    function getBytes(EternalStorage storage eternalStorage, bytes32 key) public view returns (bytes memory) {
+    function _getBytes(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bytes memory) {
         return eternalStorage.bytesValues[key];
     }
 
-    function getUintArray(EternalStorage storage eternalStorage, bytes32 key) public view returns (uint[] memory) {
+    function _getUintArray(EternalStorage storage eternalStorage, bytes32 key) internal view returns (uint[] memory) {
         return eternalStorage.uintArrays[key];
     }
 
-    function getIntArray(EternalStorage storage eternalStorage, bytes32 key) public view returns (int[] memory) {
+    function _getIntArray(EternalStorage storage eternalStorage, bytes32 key) internal view returns (int[] memory) {
         return eternalStorage.intArrays[key];
     }
 
-    function getAddressArray(EternalStorage storage eternalStorage, bytes32 key) public view returns (address[] memory) {
+    function _getAddressArray(EternalStorage storage eternalStorage, bytes32 key) internal view returns (address[] memory) {
         return eternalStorage.addressArrays[key];
     }
 
-    function getBytes32Array(EternalStorage storage eternalStorage, bytes32 key) public view returns (bytes32[] memory) {
+    function _getBytes32Array(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bytes32[] memory) {
         return eternalStorage.bytes32Arrays[key];
     }
 
-    function getBoolArray(EternalStorage storage eternalStorage, bytes32 key) public view returns (bool[] memory) {
+    function _getBoolArray(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bool[] memory) {
         return eternalStorage.boolArrays[key];
     }
 
-    function getBytesArray(EternalStorage storage eternalStorage, bytes32 key) public view returns (bytes[] memory) {
+    function _getBytesArray(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bytes[] memory) {
         return eternalStorage.bytesArrays[key];
     }
 }
