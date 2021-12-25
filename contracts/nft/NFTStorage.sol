@@ -3,11 +3,10 @@
 pragma solidity ^0.8.0;
 
 import "./NFTStructs.sol";
-import "../common/governance/GovernableStorage.sol";
 import "../common/proxy/ProxyStorage.sol";
 import "../common/libs/EternalStorage.sol";
 
-contract NFTStorage is ProxyStorage, GovernableStorage {
+contract NFTStorage is ProxyStorage {
     bytes32 internal constant PROXY_ID = keccak256("NFT");
 
     string internal _name;
@@ -16,6 +15,7 @@ contract NFTStorage is ProxyStorage, GovernableStorage {
 
     address internal _upgradesRegistry;
     
+    address internal _inventoryInterface;
     address internal _inventorySetup;
 
     uint256[] internal _inventoryUpgrades;

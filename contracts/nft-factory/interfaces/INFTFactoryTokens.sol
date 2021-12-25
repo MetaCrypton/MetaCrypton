@@ -6,10 +6,10 @@ import "../NFTFactoryStructs.sol";
 
 interface INFTFactoryTokens {
     function deployToken(
-        string calldata name,
-        string calldata symbol,
-        string calldata baseURI,
+        TokenMetadata calldata tokenMetadata,
+        address interfaceAddress,
         address governance,
+        address inventoryInterface,
         uint256[] calldata inventoryUpgrades,
         uint256[] calldata nftUpgrades
     ) external returns (address);

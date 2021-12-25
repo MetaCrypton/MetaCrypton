@@ -27,28 +27,30 @@ describe("Upgrades registry", function() {
         [admin, alice, bob, charlie] = await ethers.getSigners();
         coder = ethers.utils.defaultAbiCoder;
 
+        const upgradesRegistryInterface = await deploy("Interface");
         const upgradesRegistryInit = await deploy("UpgradesRegistryInit");
-        const upgradesRegistryProxy = await deploy("UpgradesRegistryProxy", upgradesRegistryInit.address);
+        const upgradesRegistryProxy = await deploy("UpgradesRegistryProxy", upgradesRegistryInterface.address, upgradesRegistryInit.address, admin.address);
 
         const upgradesRegistryInitializable = await ethers.getContractAt("IInitializable", upgradesRegistryProxy.address);
         upgradesRegistryUpgrade = await ethers.getContractAt("IUpgrade", upgradesRegistryProxy.address);
         upgradesRegistryUpgradable = await ethers.getContractAt("IUpgradable", upgradesRegistryProxy.address);
         upgradesRegistry = await ethers.getContractAt("IUpgradesRegistry", upgradesRegistryProxy.address);
 
-        await upgradesRegistryInitializable.initialize(coder.encode(["address"], [admin.address]));
+        await upgradesRegistryInitializable.initialize([]);
     });
 
     it("Deploy test proxy and upgrades", async function() {
+        const testInterface = await deploy("Interface");
         const test1 = await deploy("Test1");
         test2 = await deploy("Test2");
-        testProxy = await deploy("TestProxy", test1.address);
+        testProxy = await deploy("TestProxy", testInterface.address, test1.address, admin.address);
 
         const testInitializable = await ethers.getContractAt("IInitializable", testProxy.address);
         testUpgrade = await ethers.getContractAt("IUpgrade", testProxy.address);
         testUpgradable = await ethers.getContractAt("IUpgradable", testProxy.address);
         test = await ethers.getContractAt("ITest", testProxy.address);
 
-        await testInitializable.initialize(coder.encode(["address", "address"], [admin.address, upgradesRegistry.address]));
+        await testInitializable.initialize(coder.encode(["address"], [upgradesRegistry.address]));
     });
 
     it("Register test proxy in Upgrades Registry and upgrade it", async function() {

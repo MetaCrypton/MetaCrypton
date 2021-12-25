@@ -3,9 +3,8 @@
 pragma solidity ^0.8.0;
 
 import "../../common/proxy/ProxyStorage.sol";
-import "../../common/governance/GovernableStorage.sol";
 
-contract TestStorage is ProxyStorage, GovernableStorage {
+contract TestStorage is ProxyStorage {
     bytes32 internal constant PROXY_ID = keccak256("Test");
 
     address internal _upgradesRegistry;

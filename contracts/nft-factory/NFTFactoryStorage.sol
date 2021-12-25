@@ -3,10 +3,9 @@
 pragma solidity ^0.8.0;
 
 import "./NFTFactoryStructs.sol";
-import "../common/governance/GovernableStorage.sol";
 import "../common/proxy/ProxyStorage.sol";
 
-contract NFTFactoryStorage is ProxyStorage, GovernableStorage {
+contract NFTFactoryStorage is ProxyStorage {
     bytes32 internal constant PROXY_ID = keccak256("NFTFactory");
 
     address internal _upgradesRegistry;

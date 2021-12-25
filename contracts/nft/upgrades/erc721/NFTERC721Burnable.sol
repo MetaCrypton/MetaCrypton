@@ -3,8 +3,8 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-import "./NFTInitCommon.sol";
-import "../../NFTStorage.sol";
+import "./NFTERC721Upgrade.sol";
+import "../init/NFTInitCommon.sol";
 import "../../NFTErrors.sol";
 import "../../../common/interfaces/IERC721Burnable.sol";
 import "../../../common/interfaces/IERC721Events.sol";
@@ -13,10 +13,10 @@ import "../../../common/interfaces/IERC721Events.sol";
  * @title ERC721 Burnable Token
  * @dev ERC721 Token that can be irreversibly burned (destroyed).
  */
-contract NFTInitERC721Burnable is
+contract NFTERC721Burnable is
     IERC721Events,
     IERC721Burnable,
-    NFTStorage
+    NFTERC721Upgrade
 {
     using NFTInitCommon for *;
     

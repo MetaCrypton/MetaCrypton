@@ -2,8 +2,8 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-import "./NFTInitCommon.sol";
-import "../../NFTStorage.sol";
+import "./NFTERC721Upgrade.sol";
+import "../init/NFTInitCommon.sol";
 import "../../NFTErrors.sol";
 import "../../../common/governance/Governable.sol";
 import "../../../common/interfaces/IERC721Mintable.sol";
@@ -13,11 +13,11 @@ import "../../../common/interfaces/IERC721Events.sol";
  * @title ERC721 Mintable Token
  * @dev ERC721 Token that can be irreversibly minted.
  */
-contract NFTInitERC721Mintable is
+contract NFTERC721Mintable is
     IERC721Events,
     IERC721Mintable,
     Governable,
-    NFTStorage
+    NFTERC721Upgrade
 {
     using NFTInitCommon for *;
     
@@ -31,6 +31,7 @@ contract NFTInitERC721Mintable is
     function mint(address owner) external override requestPermission returns (uint256 tokenId) {
         tokenId = _tokensSet._mint(
             _upgradesRegistry,
+            _inventoryInterface,
             _inventorySetup,
             owner,
             _inventoryUpgrades
@@ -51,6 +52,7 @@ contract NFTInitERC721Mintable is
     function safeMint(address owner) external override requestPermission returns (uint256 tokenId) {
         tokenId = _tokensSet._safeMint(
             _upgradesRegistry,
+            _inventoryInterface,
             _inventorySetup,
             owner,
             _inventoryUpgrades
@@ -71,6 +73,7 @@ contract NFTInitERC721Mintable is
     function safeMint(address owner, bytes calldata data) external override requestPermission returns (uint256 tokenId) {
         tokenId = _tokensSet._safeMint(
             _upgradesRegistry,
+            _inventoryInterface,
             _inventorySetup,
             owner,
             data,

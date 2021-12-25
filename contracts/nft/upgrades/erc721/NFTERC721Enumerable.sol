@@ -2,8 +2,8 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-import "./NFTInitCommon.sol";
-import "../../NFTStorage.sol";
+import "./NFTERC721Upgrade.sol";
+import "../init/NFTInitCommon.sol";
 import "../../NFTErrors.sol";
 import "../../../common/interfaces/IERC721Enumerable.sol";
 
@@ -11,9 +11,9 @@ import "../../../common/interfaces/IERC721Enumerable.sol";
  * @title ERC-721 Non-Fungible Token Standard, optional enumeration extension
  * @dev See https://eips.ethereum.org/EIPS/eip-721
  */
-contract NFTInitERC721Enumerable is
+contract NFTERC721Enumerable is
     IERC721Enumerable,
-    NFTStorage
+    NFTERC721Upgrade
 {
     /**
      * @dev Returns the total amount of tokens stored by the contract.

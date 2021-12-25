@@ -7,3 +7,9 @@ struct NFTToken {
     address governance;
     string symbol;
 }
+
+struct TokenMetadata {
+    string name;
+    string symbol;
+    string baseURI;
+}

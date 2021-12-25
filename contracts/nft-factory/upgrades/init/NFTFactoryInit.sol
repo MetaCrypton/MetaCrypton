@@ -5,6 +5,7 @@ pragma solidity ^0.8.0;
 import "./NFTFactoryInitInitializable.sol";
 import "./NFTFactoryInitUpgradable.sol";
 import "./NFTFactoryInitUpgrade.sol";
+import "../../NFTFactoryStructs.sol";
 import "../../NFTFactoryErrors.sol";
 import "../../interfaces/INFTFactoryTokens.sol";
 import "../../interfaces/INFTFactoryEvents.sol";
@@ -20,38 +21,38 @@ contract NFTFactoryInit is
     NFTFactoryInitUpgrade
 {
     function deployToken(
-        string calldata name,
-        string calldata symbol,
-        string calldata baseURI,
+        TokenMetadata calldata tokenMetadata,
+        address interfaceAddress,
         address governance,
+        address inventoryInterface,
         uint256[] calldata nftUpgrades,
         uint256[] calldata inventoryUpgrades
     ) external override requestPermission returns (address) {
-        if (_tokenBySymbol[symbol] != 0) revert NFTFactoryErrors.ExistingToken();
+        if (_tokenBySymbol[tokenMetadata.symbol] != 0) revert NFTFactoryErrors.ExistingToken();
 
-        address token = address(new NFTProxy(name, symbol, baseURI, _nftSetup));
+        address token = address(new NFTProxy(tokenMetadata.name, tokenMetadata.symbol, tokenMetadata.baseURI, interfaceAddress, _nftSetup, address(this)));
 
         uint256 id = _registeredTokens.length;
-        _tokenBySymbol[symbol] = id;
+        _tokenBySymbol[tokenMetadata.symbol] = id;
         _tokenByAddress[token] = id;
         _tokensByGovernance[governance].push(id);
 
         _registeredTokens.push(NFTToken(
             token,
             governance,
-            symbol
+            tokenMetadata.symbol
         ));
 
         emit TokenDeployed(
-            name,
-            symbol,
-            baseURI,
+            tokenMetadata.name,
+            tokenMetadata.symbol,
+            tokenMetadata.baseURI,
             governance,
             token
         );
 
         IInitializable(token).initialize(
-            abi.encode(address(this), _upgradesRegistry, _inventorySetup, inventoryUpgrades)
+            abi.encode(_upgradesRegistry, inventoryInterface, _inventorySetup, inventoryUpgrades)
         );
         IUpgradesRegistry(_upgradesRegistry).registerProxy(token);
 

@@ -4,15 +4,26 @@ pragma solidity ^0.8.0;
 
 import "./ProxyStorage.sol";
 import "./initialization/IInitializable.sol";
+import "../governance/Governable.sol";
 import "../interfaces/IERC165.sol";
 
-contract Proxy is ProxyStorage {
+contract Proxy is Governable, ProxyStorage {
     error EmptySetupAddress();
-    error UnknownMethod();
+    error EmptyInterfaceAddress();
+    error SameInterfaceAddress();
 
-    constructor(address setup) {
+    event Upgraded(address indexed implementation);
+
+    constructor(address interfaceAddress, address setup, address governance) {
+        if (interfaceAddress == address(0x00)) revert Proxy.EmptyInterfaceAddress();
         if (setup == address(0x00)) revert Proxy.EmptySetupAddress();
+        if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
         _initializerAddress = msg.sender;
+
+        _interfaceAddress = interfaceAddress;
+        emit Upgraded(interfaceAddress);
+
+        _governance = governance;
 
         _methods[IInitializable.initialize.selector] = setup;
         _methods[IERC165.supportsInterface.selector] = setup;
@@ -22,8 +33,7 @@ contract Proxy is ProxyStorage {
 
 
     fallback() external payable {
-        address impl = _methods[msg.sig];
-        if (impl == address(0x00)) revert UnknownMethod();
+        address impl = _interfaceAddress;
 
         assembly {
             let p := mload(0x40)
@@ -40,5 +50,16 @@ contract Proxy is ProxyStorage {
                 return(p, size)
             }
         }
+    }
+
+    function upgradeTo(address newInterface) external requestPermission {
+        if (newInterface == address(0x00)) revert EmptyInterfaceAddress();
+        if (_interfaceAddress == newInterface) revert SameInterfaceAddress();
+        _interfaceAddress = newInterface;
+        emit Upgraded(newInterface);
+    }
+
+    function implementation() external view returns (address) {
+        return _interfaceAddress;
     }
 }

@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitCommon.sol";
 import "../../interfaces/IUpgradesRegistry.sol";
-import "../../../common/governance/GovernableErrors.sol";
 import "../../../common/proxy/initialization/IInitializable.sol";
 import "../../../common/proxy/initialization/Initializable.sol";
 
@@ -14,10 +13,6 @@ contract UpgradesRegistryInitInitializable is
     UpgradesRegistryInitCommon
 {
     function initialize(bytes memory input) public override (IInitializable, Initializable) {
-        address governance = abi.decode(input, (address));
-        if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
-        _governance = governance;
-
         address init = _methods[msg.sig];
         _storeMethods(init);
         _storeUpgrade(PROXY_ID, init);

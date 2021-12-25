@@ -14,6 +14,7 @@ library NFTInitCommon {
     function _safeMint(
         TokensSet storage tokensSet,
         address upgradesRegistry,
+        address inventoryInterface,
         address inventorySetup,
         address to,
         uint256[] memory inventoryUpgrades
@@ -21,6 +22,7 @@ library NFTInitCommon {
         return _safeMint(
             tokensSet,
             upgradesRegistry,
+            inventoryInterface,
             inventorySetup,
             to,
             "",
@@ -31,6 +33,7 @@ library NFTInitCommon {
     function _safeMint(
         TokensSet storage tokensSet,
         address upgradesRegistry,
+        address inventoryInterface,
         address inventorySetup,
         address to,
         bytes memory data,
@@ -39,6 +42,7 @@ library NFTInitCommon {
         tokenId = _mint(
             tokensSet,
             upgradesRegistry,
+            inventoryInterface,
             inventorySetup,
             to,
             inventoryUpgrades
@@ -51,6 +55,7 @@ library NFTInitCommon {
     function _mint(
         TokensSet storage tokensSet,
         address upgradesRegistry,
+        address inventoryInterface,
         address inventorySetup,
         address to,
         uint256[] memory inventoryUpgrades
@@ -58,6 +63,7 @@ library NFTInitCommon {
         address inventory;
         (inventory, tokenId)  = _deployInventory(
             upgradesRegistry,
+            inventoryInterface,
             inventorySetup,
             inventoryUpgrades
         );
@@ -184,10 +190,11 @@ library NFTInitCommon {
 
     function _deployInventory(
         address upgradesRegistry,
+        address inventoryInterface,
         address inventorySetup,
         uint256[] memory inventoryUpgrades
     ) internal returns (address inventory, uint256 tokenId) {
-        inventory = address(new InventoryProxy(inventorySetup));
+        inventory = address(new InventoryProxy(inventoryInterface, inventorySetup, address(this)));
         tokenId = _addressToTokenId(inventory);
 
         IInitializable(inventory).initialize(

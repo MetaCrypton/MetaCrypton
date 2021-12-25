@@ -60,10 +60,8 @@ contract Test1 is
     }
     
     function initialize(bytes memory input) public override (IInitializable, Initializable) {
-        (address governance, address upgradesRegistry) = abi.decode(input, (address, address));
-        if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
+        (address upgradesRegistry) = abi.decode(input, (address));
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
-        _governance = governance;
         _upgradesRegistry = upgradesRegistry;
 
         _storeMethods(_methods[msg.sig]);

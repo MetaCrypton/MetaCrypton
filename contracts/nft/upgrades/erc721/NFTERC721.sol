@@ -2,17 +2,24 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-import "./NFTInitCommon.sol";
-import "../../NFTStorage.sol";
+import "./NFTERC721Burnable.sol";
+import "./NFTERC721Enumerable.sol";
+import "./NFTERC721Metadata.sol";
+import "./NFTERC721Mintable.sol";
+import "./NFTERC721Upgrade.sol";
+import "../init/NFTInitCommon.sol";
 import "../../NFTErrors.sol";
 import "../../../common/interfaces/IERC721.sol";
 
 /**
  * @dev Required interface of an ERC721 compliant contract.
  */
-contract NFTInitERC721 is
+contract NFTERC721 is
     IERC721,
-    NFTStorage
+    NFTERC721Burnable,
+    NFTERC721Enumerable,
+    NFTERC721Metadata,
+    NFTERC721Mintable
 {
     using NFTInitCommon for *;
 

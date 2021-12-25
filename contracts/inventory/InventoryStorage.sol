@@ -3,11 +3,10 @@
 pragma solidity ^0.8.0;
 
 import "./InventoryStructs.sol";
-import "../common/governance/GovernableStorage.sol";
 import "../common/proxy/ProxyStorage.sol";
 import "../common/libs/EternalStorage.sol";
 
-contract InventoryStorage is ProxyStorage, GovernableStorage {
+contract InventoryStorage is ProxyStorage {
     bytes32 internal constant PROXY_ID = keccak256("Inventory");
 
     address internal _upgradesRegistry;

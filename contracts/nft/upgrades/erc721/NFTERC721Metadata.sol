@@ -5,8 +5,8 @@
 
 pragma solidity ^0.8.0;
 
-import "./NFTInitCommon.sol";
-import "../../NFTStorage.sol";
+import "./NFTERC721Upgrade.sol";
+import "../init/NFTInitCommon.sol";
 import "../../../common/interfaces/IERC721Metadata.sol";
 import "../../../common/libs/StringUtils.sol";
 
@@ -14,9 +14,9 @@ import "../../../common/libs/StringUtils.sol";
  * @title ERC-721 Non-Fungible Token Standard, optional metadata extension
  * @dev See https://eips.ethereum.org/EIPS/eip-721
  */
-contract NFTInitERC721Metadata is
+contract NFTERC721Metadata is
     IERC721Metadata,
-    NFTStorage
+    NFTERC721Upgrade
 {
     using NFTInitCommon for *;
     using StringUtils for *;

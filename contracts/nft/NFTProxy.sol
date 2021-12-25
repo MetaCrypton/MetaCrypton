@@ -14,8 +14,10 @@ contract NFTProxy is Proxy, NFTStorage {
         string memory name,
         string memory symbol,
         string memory baseURI,
-        address setup
-    ) Proxy(setup) {
+        address interfaceAddress,
+        address setup,
+        address governance
+    ) Proxy(interfaceAddress, setup, governance) {
         if ((bytes(name).length == 0) || (bytes(name).length > 30)) revert WrongNameLength();
         if ((bytes(symbol).length == 0) || (bytes(symbol).length > 10)) revert WrongSymbolLength();
 

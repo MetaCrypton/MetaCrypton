@@ -5,7 +5,6 @@ pragma solidity ^0.8.0;
 import "../../NFTFactoryStorage.sol";
 import "../../interfaces/INFTFactory.sol";
 import "../../../upgrades-registry/interfaces/IUpgradesRegistry.sol";
-import "../../../common/governance/GovernableErrors.sol";
 import "../../../common/proxy/initialization/IInitializable.sol";
 import "../../../common/proxy/initialization/Initializable.sol";
 import "../../../common/upgradability/IUpgrade.sol";
@@ -23,16 +22,13 @@ contract NFTFactoryInitInitializable is
 
     function initialize(bytes memory input) public override (IInitializable, Initializable) {
         (
-            address governance,
             address upgradesRegistry,
             address nftSetup,
             address inventorySetup
-        ) = abi.decode(input, (address, address, address, address));
-        if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
+        ) = abi.decode(input, (address, address, address));
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
         if (nftSetup == address(0x00)) revert EmptyNFTSetup();
         if (inventorySetup == address(0x00)) revert EmptyInventorySetup();
-        _governance = governance;
         _upgradesRegistry = upgradesRegistry;
         _nftSetup = nftSetup;
         _inventorySetup = inventorySetup;
