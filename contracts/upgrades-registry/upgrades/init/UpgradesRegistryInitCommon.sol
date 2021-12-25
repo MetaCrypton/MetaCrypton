@@ -2,7 +2,7 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-import "./UpgradesRegistryInitErrors.sol";
+import "../../UpgradesRegistryErrors.sol";
 import "../../UpgradesRegistryStorage.sol";
 import "../../../common/upgradability/IUpgrade.sol";
 import "../../../common/upgradability/IUpgradable.sol";
@@ -70,7 +70,7 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
     function _verifyUnexistingUpgrade(Upgrades storage upgrades, address upgradeAddress) internal view {
         uint256 length = upgrades.upgradesAddresses.length;
         for (uint256 i = 0; i < length; i++) {
-            if (upgrades.upgradesAddresses[i] == upgradeAddress) revert UpgradesRegistryInitErrors.ExistingUpgrade();
+            if (upgrades.upgradesAddresses[i] == upgradeAddress) revert UpgradesRegistryErrors.ExistingUpgrade();
         }
     }
 
@@ -81,14 +81,14 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
     function _getProxyMaxPossibleUpgradeIndex(bytes32 proxyId) internal view returns (uint256) {
         Upgrades storage upgrades = _upgrades[proxyId];
         uint256 length = upgrades.upgradesAddresses.length;
-        if (length == 0) revert UpgradesRegistryInitErrors.NoUpgrades();
+        if (length == 0) revert UpgradesRegistryErrors.NoUpgrades();
 
         return length - 1;
     }
 
     function _getProxyId(address proxyAddress) internal view returns (bytes32) {
         bytes32 proxyId = _proxies[proxyAddress].proxyId;
-        if (proxyId == bytes32(0x00)) revert UpgradesRegistryInitErrors.UnexistingProxy();
+        if (proxyId == bytes32(0x00)) revert UpgradesRegistryErrors.UnexistingProxy();
         return proxyId;
     }
 
@@ -97,35 +97,35 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
     }
 
     function _verifyUnexistingProxy(StoredProxy storage proxy) internal view {
-        if (proxy.proxyId != bytes32(0x00)) revert UpgradesRegistryInitErrors.ExistingProxy();
+        if (proxy.proxyId != bytes32(0x00)) revert UpgradesRegistryErrors.ExistingProxy();
     }
 
     function _verifyExistingUpgrade(Upgrades storage upgrades, uint256 upgradeIndex) internal view {
-        if (upgrades.upgradesAddresses.length <= upgradeIndex) revert UpgradesRegistryInitErrors.UnexistingUpgrade();
+        if (upgrades.upgradesAddresses.length <= upgradeIndex) revert UpgradesRegistryErrors.UnexistingUpgrade();
     }
 
     function _verifyUpgradeNotApplied(StoredProxy storage proxy, uint256 upgradeIndex) internal view {
         uint256 length = proxy.currentUpgradesList.length;
         for (uint256 i = 0; i < length; i++) {
-            if (proxy.currentUpgradesList[i] == upgradeIndex) revert UpgradesRegistryInitErrors.UpgradeApplied();
+            if (proxy.currentUpgradesList[i] == upgradeIndex) revert UpgradesRegistryErrors.UpgradeApplied();
         }
     }
 
     function _verifyIUpgradableInterface(address componentAddress) internal view {
-        if (!IERC165(componentAddress).supportsInterface(type(IUpgradable).interfaceId)) revert UpgradesRegistryInitErrors.NoUpgradableInterfaceSupport();
+        if (!IERC165(componentAddress).supportsInterface(type(IUpgradable).interfaceId)) revert UpgradesRegistryErrors.NoUpgradableInterfaceSupport();
     }
 
     function _verifyIUpgradeInterface(address componentAddress) internal view {
-        if (!IERC165(componentAddress).supportsInterface(type(IUpgrade).interfaceId)) revert UpgradesRegistryInitErrors.NoUpgradeInterfaceSupport();
+        if (!IERC165(componentAddress).supportsInterface(type(IUpgrade).interfaceId)) revert UpgradesRegistryErrors.NoUpgradeInterfaceSupport();
     }
 
     function _verifyProxyInput(bytes32 proxyId, address proxyAddress) internal pure {
-        if (proxyId == bytes32(0x00)) revert UpgradesRegistryInitErrors.EmptyProxyId();
-        if (proxyAddress == address(0x00)) revert UpgradesRegistryInitErrors.EmptyProxyAddress();
+        if (proxyId == bytes32(0x00)) revert UpgradesRegistryErrors.EmptyProxyId();
+        if (proxyAddress == address(0x00)) revert UpgradesRegistryErrors.EmptyProxyAddress();
     }
 
     function _verifyUpgradeInput(bytes32 proxyId, address upgradeAddress) internal pure {
-        if (proxyId == bytes32(0x00)) revert UpgradesRegistryInitErrors.EmptyProxyId();
-        if (upgradeAddress == address(0x00)) revert UpgradesRegistryInitErrors.EmptyUpgradeAddress();
+        if (proxyId == bytes32(0x00)) revert UpgradesRegistryErrors.EmptyProxyId();
+        if (upgradeAddress == address(0x00)) revert UpgradesRegistryErrors.EmptyUpgradeAddress();
     }
 }

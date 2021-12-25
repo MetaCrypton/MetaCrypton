@@ -2,7 +2,7 @@
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 pragma solidity ^0.8.0;
 
-library UpgradesRegistryInitErrors {
+library UpgradesRegistryErrors {
     error EmptyProxyId();
     error EmptyProxyAddress();
     error ExistingProxy();
