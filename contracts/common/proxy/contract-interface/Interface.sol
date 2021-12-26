@@ -11,6 +11,10 @@ contract Interface is ProxyStorage {
 
 
     fallback() external payable {
+        _delegateCall();
+    }
+
+    function _delegateCall() internal {
         address impl = _methods[msg.sig];
         if (impl == address(0x00)) revert UnknownMethod();
 
@@ -28,6 +32,16 @@ contract Interface is ProxyStorage {
             default {
                 return(p, size)
             }
+        }
+    }
+
+    function _staticCall(bytes memory payload) internal view {
+        (bool result, bytes memory data) = address(this).staticcall(payload);
+
+        assembly {
+            switch result
+            case 0x00 { revert(add(data, 32), returndatasize()) }
+            default { return(add(data, 32), returndatasize()) }
         }
     }
 }

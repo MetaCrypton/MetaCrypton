@@ -14,7 +14,7 @@ describe("Integration", function() {
 
     let nftInterface;
 
-    let inventoryInterface;
+    let inventoryLootboxInterface;
     let inventoryInit;
 
     let nftFactoryProxy;
@@ -85,7 +85,7 @@ describe("Integration", function() {
 
     it("Deploy inventory upgrades and register in Upgrades registry", async function() {
         inventoryInit = await deploy("InventoryInit");
-        inventoryInterface = await deploy("Interface");
+        inventoryLootboxInterface = await deploy("InventoryLootboxInterface");
         const inventoryEther = await deploy("InventoryEther");
         const inventoryLootbox = await deploy("InventoryLootbox");
 
@@ -125,7 +125,7 @@ describe("Integration", function() {
             ],
             nftInterface.address,
             admin.address,
-            inventoryInterface.address,
+            inventoryLootboxInterface.address,
             [0, 1],
             [0, 1]
         );

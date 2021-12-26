@@ -3,8 +3,8 @@
 pragma solidity ^0.8.0;
 
 import "./InventoryLootboxUpgrade.sol";
-import "../init/InventoryInitAssets.sol";
-import "../init/InventoryInitOwnership.sol";
+import "../core/init/InventoryInitAssets.sol";
+import "../core/init/InventoryInitOwnership.sol";
 import "../../InventoryErrors.sol";
 import "../../InventoryStorage.sol";
 import "../../interfaces/IInventoryLootbox.sol";
