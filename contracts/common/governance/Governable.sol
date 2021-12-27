@@ -18,7 +18,7 @@ contract Governable is GovernableStorage {
                 revert GovernableErrors.NoPermission();
             }
         }
-            
+
         _;
     }
 }

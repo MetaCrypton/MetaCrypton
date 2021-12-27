@@ -6,7 +6,12 @@ import "../../../InventoryStorage.sol";
 import "../../../InventoryErrors.sol";
 
 library InventoryInitAssets {
-    function _addAsset(AssetsSet storage assets, uint256 id, AssetType assetType, bytes memory data) internal {
+    function _addAsset(
+        AssetsSet storage assets,
+        uint256 id,
+        AssetType assetType,
+        bytes memory data
+    ) internal {
         assets.assets.push(Asset(id, assetType, data));
         assets.assetIndexById[id] = assets.assets.length;
     }
@@ -21,7 +26,7 @@ library InventoryInitAssets {
 
         uint256 lastIndex = assets.assets.length - 1;
         Asset memory last = assets.assets[lastIndex];
-        
+
         old.id = last.id;
         old.assetType = last.assetType;
         old.data = last.data;
@@ -31,10 +36,14 @@ library InventoryInitAssets {
         delete assets.assetIndexById[oldId];
     }
 
-    function _getAssets(AssetsSet storage assets, uint256 startIndex, uint256 number) internal view returns (Asset[] memory) {
+    function _getAssets(
+        AssetsSet storage assets,
+        uint256 startIndex,
+        uint256 number
+    ) internal view returns (Asset[] memory) {
         uint256 endIndex = startIndex + number;
         if (endIndex > assets.assets.length) revert InventoryErrors.WrongEndIndex();
-        
+
         Asset[] memory assetsToReturn = new Asset[](number);
         for (uint256 i = startIndex; i < endIndex; i++) {
             assetsToReturn[i - startIndex] = assets.assets[i];

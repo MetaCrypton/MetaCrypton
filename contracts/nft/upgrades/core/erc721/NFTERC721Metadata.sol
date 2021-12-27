@@ -1,5 +1,3 @@
-
-   
 // SPDX-License-Identifier: Apache 2.0
 // Copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 
@@ -15,11 +13,7 @@ import "../../../../common/libs/StringUtils.sol";
  * @title ERC-721 Non-Fungible Token Standard, optional metadata extension
  * @dev See https://eips.ethereum.org/EIPS/eip-721
  */
-contract NFTERC721Metadata is
-    IERC721Metadata,
-    INFTERC721MetadataStaticMethods,
-    NFTERC721Upgrade
-{
+contract NFTERC721Metadata is IERC721Metadata, INFTERC721MetadataStaticMethods, NFTERC721Upgrade {
     using NFTInitCommon for *;
     using StringUtils for *;
 
@@ -65,8 +59,6 @@ contract NFTERC721Metadata is
         _tokensSet._verifyTokenId(tokenId);
 
         string memory baseURI = _baseURI;
-        return bytes(baseURI).length > 0
-            ? string(abi.encodePacked(baseURI, tokenId._toString()))
-            : "";
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId._toString())) : "";
     }
 }

@@ -8,9 +8,13 @@ import "../common/proxy/Proxy.sol";
 contract InventoryProxy is Proxy, InventoryStorage {
     error UseDepositEtherFunction();
 
-    constructor(address interfaceAddress, address setup, address governance) Proxy(interfaceAddress, setup, governance) { }
+    constructor(
+        address interfaceAddress,
+        address setup,
+        address governance
+    ) Proxy(interfaceAddress, setup, governance) {}
 
-    receive() external payable override (Proxy) {
+    receive() external payable override(Proxy) {
         revert UseDepositEtherFunction();
     }
 }

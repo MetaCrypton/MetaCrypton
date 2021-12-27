@@ -9,13 +9,7 @@ import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 import "../../../../common/upgradability/IUpgradableStaticMethods.sol";
 
-
-contract NFTFactoryInitUpgradable is
-    IUpgradable,
-    IUpgradableStaticMethods,
-    Governable,
-    NFTFactoryStorage
-{
+contract NFTFactoryInitUpgradable is IUpgradable, IUpgradableStaticMethods, Governable, NFTFactoryStorage {
     function upgrade(uint256 upgradeIndex) external override requestPermission {
         address upgradeAddress = IUpgradesRegistry(_upgradesRegistry).upgradeProxy(upgradeIndex);
         _methods[IUpgrade(address(0x00)).applyUpgrade.selector] = upgradeAddress;

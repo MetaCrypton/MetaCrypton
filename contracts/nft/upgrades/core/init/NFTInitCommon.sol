@@ -19,15 +19,7 @@ library NFTInitCommon {
         address to,
         uint256[] memory inventoryUpgrades
     ) internal returns (uint256 tokenId) {
-        return _safeMint(
-            tokensSet,
-            upgradesRegistry,
-            inventoryInterface,
-            inventorySetup,
-            to,
-            "",
-            inventoryUpgrades
-        );
+        return _safeMint(tokensSet, upgradesRegistry, inventoryInterface, inventorySetup, to, "", inventoryUpgrades);
     }
 
     function _safeMint(
@@ -39,16 +31,10 @@ library NFTInitCommon {
         bytes memory data,
         uint256[] memory inventoryUpgrades
     ) internal returns (uint256 tokenId) {
-        tokenId = _mint(
-            tokensSet,
-            upgradesRegistry,
-            inventoryInterface,
-            inventorySetup,
-            to,
-            inventoryUpgrades
-        );
-        if (!_checkOnERC721Received(address(0x00), to, tokenId, data)) revert NFTErrors.TransferToNonERC721ReceiverImplementer();
-        
+        tokenId = _mint(tokensSet, upgradesRegistry, inventoryInterface, inventorySetup, to, inventoryUpgrades);
+        if (!_checkOnERC721Received(address(0x00), to, tokenId, data))
+            revert NFTErrors.TransferToNonERC721ReceiverImplementer();
+
         return tokenId;
     }
 
@@ -61,7 +47,7 @@ library NFTInitCommon {
         uint256[] memory inventoryUpgrades
     ) internal returns (uint256 tokenId) {
         address inventory;
-        (inventory, tokenId)  = _deployInventory(
+        (inventory, tokenId) = _deployInventory(
             upgradesRegistry,
             inventoryInterface,
             inventorySetup,
@@ -105,10 +91,7 @@ library NFTInitCommon {
         _addToOwner(tokensSet, to, tokenId);
     }
 
-    function _burn(
-        TokensSet storage tokensSet,
-        uint256 tokenId
-    ) internal returns (address) {
+    function _burn(TokensSet storage tokensSet, uint256 tokenId) internal returns (address) {
         Token storage token = _safeGetToken(tokensSet, tokenId);
         address owner = token.owner;
 
@@ -130,10 +113,7 @@ library NFTInitCommon {
         tokensSet.tokenIndexById[tokenId] = tokensSet.tokens.length;
     }
 
-    function _removeToken(
-        TokensSet storage tokensSet,
-        uint256 tokenId
-    ) internal {
+    function _removeToken(TokensSet storage tokensSet, uint256 tokenId) internal {
         uint256 toDeleteIndex = _idToTokenIndex(tokensSet, tokenId) - 1;
         uint256 lastIndex = tokensSet.tokens.length - 1;
 
@@ -197,9 +177,7 @@ library NFTInitCommon {
         inventory = address(new InventoryProxy(inventoryInterface, inventorySetup, address(this)));
         tokenId = _addressToTokenId(inventory);
 
-        IInitializable(inventory).initialize(
-            abi.encode(address(this), tokenId, upgradesRegistry)
-        );
+        IInitializable(inventory).initialize(abi.encode(address(this), tokenId, upgradesRegistry));
 
         IUpgradesRegistry(upgradesRegistry).registerProxy(inventory);
 
@@ -275,11 +253,9 @@ library NFTInitCommon {
         uint256 tokenId
     ) internal view returns (bool) {
         address owner = _safeOwnerOf(tokensSet, tokenId);
-        return (
-            spender == owner
-            || tokensSet.tokenApprovalsById[tokenId] == spender
-            || _isApprovedForAll(tokensSet, owner, spender)
-        );
+        return (spender == owner ||
+            tokensSet.tokenApprovalsById[tokenId] == spender ||
+            _isApprovedForAll(tokensSet, owner, spender));
     }
 
     function _addressToTokenId(address inventory) internal pure returns (uint256) {

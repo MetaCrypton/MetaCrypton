@@ -6,10 +6,11 @@ import "../ProxyStorage.sol";
 
 contract Interface is ProxyStorage {
     error UnknownMethod();
-    
+
+    // solhint-disable-next-line comprehensive-interface
     receive() external payable virtual {}
 
-
+    // solhint-disable-next-line comprehensive-interface
     fallback() external payable {
         _delegateCall();
     }
@@ -40,8 +41,12 @@ contract Interface is ProxyStorage {
 
         assembly {
             switch result
-            case 0x00 { revert(add(data, 32), returndatasize()) }
-            default { return(add(data, 32), returndatasize()) }
+            case 0x00 {
+                revert(add(data, 32), returndatasize())
+            }
+            default {
+                return(add(data, 32), returndatasize())
+            }
         }
     }
 }

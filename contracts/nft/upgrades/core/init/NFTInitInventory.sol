@@ -7,11 +7,7 @@ import "../../../NFTStorage.sol";
 import "../../../interfaces/INFTStaticMethods.sol";
 import "../../../interfaces/INFTInventory.sol";
 
-contract NFTInitInventory is
-    INFTInventory,
-    INFTInventoryStaticMethods,
-    NFTStorage
-{
+contract NFTInitInventory is INFTInventory, INFTInventoryStaticMethods, NFTStorage {
     using NFTInitCommon for *;
 
     function inventoryOf_(uint256 tokenId) external view override returns (address owner) {

@@ -41,7 +41,7 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
 
     function _storeUpgrade(bytes32 proxyId, address upgradeAddress) internal returns (uint256) {
         _verifyUpgradeInput(proxyId, upgradeAddress);
-        
+
         Upgrades storage upgrades = _upgrades[proxyId];
         _verifyUnexistingUpgrade(upgrades, upgradeAddress);
 
@@ -63,7 +63,7 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
         _verifyUpgradeNotApplied(proxy, upgradeIndex);
 
         proxy.currentUpgradesList.push(upgradeIndex);
-        
+
         return upgrades.upgradesAddresses[upgradeIndex];
     }
 
@@ -112,11 +112,13 @@ contract UpgradesRegistryInitCommon is UpgradesRegistryStorage {
     }
 
     function _verifyIUpgradableInterface(address componentAddress) internal view {
-        if (!IERC165(componentAddress).supportsInterface(type(IUpgradable).interfaceId)) revert UpgradesRegistryErrors.NoUpgradableInterfaceSupport();
+        if (!IERC165(componentAddress).supportsInterface(type(IUpgradable).interfaceId))
+            revert UpgradesRegistryErrors.NoUpgradableInterfaceSupport();
     }
 
     function _verifyIUpgradeInterface(address componentAddress) internal view {
-        if (!IERC165(componentAddress).supportsInterface(type(IUpgrade).interfaceId)) revert UpgradesRegistryErrors.NoUpgradeInterfaceSupport();
+        if (!IERC165(componentAddress).supportsInterface(type(IUpgrade).interfaceId))
+            revert UpgradesRegistryErrors.NoUpgradeInterfaceSupport();
     }
 
     function _verifyProxyInput(bytes32 proxyId, address proxyAddress) internal pure {

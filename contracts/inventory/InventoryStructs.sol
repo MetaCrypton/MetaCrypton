@@ -17,7 +17,7 @@ struct Asset {
 struct AssetsSet {
     Asset[] assets;
     // Mapping from assets ids to their indexes plus 1 because 0 means that id is not in used
-    mapping (uint256 => uint256) assetIndexById;
+    mapping(uint256 => uint256) assetIndexById;
 }
 
 struct EtherStruct {

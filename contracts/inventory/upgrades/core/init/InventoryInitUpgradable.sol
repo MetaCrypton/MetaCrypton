@@ -9,13 +9,7 @@ import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 import "../../../../common/upgradability/IUpgradableStaticMethods.sol";
 
-
-contract InventoryInitUpgradable is
-    IUpgradable,
-    IUpgradableStaticMethods,
-    Governable,
-    InventoryStorage
-{
+contract InventoryInitUpgradable is IUpgradable, IUpgradableStaticMethods, Governable, InventoryStorage {
     function upgrade(uint256 upgradeIndex) external override requestPermission {
         address upgradeAddress = IUpgradesRegistry(_upgradesRegistry).upgradeProxy(upgradeIndex);
         _methods[IUpgrade(address(0x00)).applyUpgrade.selector] = upgradeAddress;

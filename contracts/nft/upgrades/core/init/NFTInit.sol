@@ -8,10 +8,4 @@ import "./NFTInitInitializable.sol";
 import "./NFTInitUpgradable.sol";
 import "./NFTInitUpgrade.sol";
 
-contract NFTInit is
-    NFTInitGovernable,
-    NFTInitInventory,
-    NFTInitInitializable,
-    NFTInitUpgradable,
-    NFTInitUpgrade
-{ }
+contract NFTInit is NFTInitGovernable, NFTInitInventory, NFTInitInitializable, NFTInitUpgradable, NFTInitUpgrade {}

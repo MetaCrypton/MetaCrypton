@@ -14,7 +14,7 @@ contract NFTStorage is ProxyStorage {
     string internal _baseURI;
 
     address internal _upgradesRegistry;
-    
+
     address internal _inventoryInterface;
     address internal _inventorySetup;
 

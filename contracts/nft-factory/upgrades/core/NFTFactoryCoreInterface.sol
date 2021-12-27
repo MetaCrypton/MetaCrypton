@@ -50,12 +50,10 @@ contract NFTFactoryCoreInterface is INFTFactory, IUpgradable, IUpgrade, Interfac
         );
         _staticCall(data);
     }
-    
+
     function getTokensTotal() external view override returns (uint256 result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTFactoryStaticMethods(address(0x00)).getTokensTotal_.selector
-        );
+        bytes memory data = abi.encodeWithSelector(INFTFactoryStaticMethods(address(0x00)).getTokensTotal_.selector);
         _staticCall(data);
     }
 
@@ -86,7 +84,11 @@ contract NFTFactoryCoreInterface is INFTFactory, IUpgradable, IUpgrade, Interfac
         _staticCall(data);
     }
 
-    function getTokensByGovernance(address governance, uint256 startIndex, uint256 number) external view override returns (NFTToken[] memory result) {
+    function getTokensByGovernance(
+        address governance,
+        uint256 startIndex,
+        uint256 number
+    ) external view override returns (NFTToken[] memory result) {
         result;
         bytes memory data = abi.encodeWithSelector(
             INFTFactoryStaticMethods(address(0x00)).getTokensByGovernance_.selector,
@@ -99,13 +101,17 @@ contract NFTFactoryCoreInterface is INFTFactory, IUpgradable, IUpgrade, Interfac
 
     function getCurrentUpgrades() external view override returns (uint256[] memory upgradesIndexes) {
         upgradesIndexes;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector
+        );
         _staticCall(data);
     }
 
     function getMaxPossibleUpgradeIndex() external view override returns (uint256 index) {
         index;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector
+        );
         _staticCall(data);
     }
 

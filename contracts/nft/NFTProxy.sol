@@ -26,7 +26,7 @@ contract NFTProxy is Proxy, NFTStorage {
         _baseURI = baseURI;
     }
 
-    receive() external payable override (Proxy) {
+    receive() external payable override(Proxy) {
         revert UseDepositEtherFunction();
     }
 }

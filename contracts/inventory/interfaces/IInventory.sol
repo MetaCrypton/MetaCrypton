@@ -8,10 +8,4 @@ import "./IInventoryERC20.sol";
 import "./IInventoryERC721.sol";
 import "../../common/interfaces/IERC721Receiver.sol";
 
-interface IInventory is
-    IInventoryEvents,
-    IInventoryEther,
-    IInventoryERC20,
-    IInventoryERC721,
-    IERC721Receiver
-{ }
+interface IInventory is IInventoryEvents, IInventoryEther, IInventoryERC20, IInventoryERC721, IERC721Receiver {}

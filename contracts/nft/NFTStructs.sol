@@ -12,14 +12,11 @@ struct TokensSet {
     // Tokens list
     Token[] tokens;
     // Mapping from tokens id to index plus 1 because 0 means that id is not in used
-    mapping (uint256 => uint256) tokenIndexById;
-
+    mapping(uint256 => uint256) tokenIndexById;
     // Mapping from token id to approved address
-    mapping (uint256 => address) tokenApprovalsById;
-    
+    mapping(uint256 => address) tokenApprovalsById;
     // Mapping from owner to her tokens
-    mapping (address => uint256[]) tokenIdsByOwner;
-
+    mapping(address => uint256[]) tokenIdsByOwner;
     // Mapping from owner to operator approvals
-    mapping (address => mapping (address => bool)) operatorApprovals;
+    mapping(address => mapping(address => bool)) operatorApprovals;
 }

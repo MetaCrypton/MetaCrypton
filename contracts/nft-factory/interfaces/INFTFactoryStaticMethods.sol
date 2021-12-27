@@ -8,7 +8,7 @@ import "../../common/upgradability/IUpgradeStaticMethods.sol";
 
 interface INFTFactoryTokensStaticMethods {
     function getTokens_(uint256 startIndex, uint256 number) external view returns (NFTToken[] memory);
-    
+
     function getTokensTotal_() external view returns (uint256);
 
     function getTokensByGovernanceTotal_(address governance) external view returns (uint256);
@@ -17,11 +17,11 @@ interface INFTFactoryTokensStaticMethods {
 
     function getTokenBySymbol_(string calldata symbol) external view returns (NFTToken memory);
 
-    function getTokensByGovernance_(address governance, uint256 startIndex, uint256 number) external view returns (NFTToken[] memory);
+    function getTokensByGovernance_(
+        address governance,
+        uint256 startIndex,
+        uint256 number
+    ) external view returns (NFTToken[] memory);
 }
 
-interface INFTFactoryStaticMethods is
-    INFTFactoryTokensStaticMethods,
-    IUpgradableStaticMethods,
-    IUpgradeStaticMethods
-{ }
+interface INFTFactoryStaticMethods is INFTFactoryTokensStaticMethods, IUpgradableStaticMethods, IUpgradeStaticMethods {}

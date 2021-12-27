@@ -11,17 +11,12 @@ import "../../../../common/proxy/initialization/Initializable.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 
-
-contract NFTInitInitializable is
-    IInitializable,
-    Initializable,
-    NFTStorage
-{
+contract NFTInitInitializable is IInitializable, Initializable, NFTStorage {
     error EmptyUpgradesRegistry();
     error EmptyInventoryInterfaceSetup();
     error EmptyInventorySetup();
 
-    function initialize(bytes memory input) public override (IInitializable, Initializable) {
+    function initialize(bytes memory input) public override(IInitializable, Initializable) {
         (
             address upgradesRegistry,
             address inventoryInterface,
@@ -35,7 +30,7 @@ contract NFTInitInitializable is
         _inventoryInterface = inventoryInterface;
         _inventorySetup = inventorySetup;
         _inventoryUpgrades = inventoryUpgrades;
-        
+
         _storeMethods(_methods[msg.sig]);
 
         super.initialize(input);

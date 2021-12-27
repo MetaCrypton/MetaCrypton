@@ -5,7 +5,4 @@ pragma solidity ^0.8.0;
 import "./INFTFactoryTokens.sol";
 import "../../common/governance/interfaces/IGovernable.sol";
 
-interface INFTFactory is
-    IGovernable,
-    INFTFactoryTokens
-{ }
+interface INFTFactory is IGovernable, INFTFactoryTokens {}

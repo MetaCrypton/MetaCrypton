@@ -14,7 +14,7 @@ contract NFTFactoryStorage is ProxyStorage {
     address internal _inventorySetup;
 
     NFTToken[] internal _registeredTokens;
-    mapping (string => uint256) internal _tokenBySymbol;
-    mapping (address => uint256) internal _tokenByAddress;
-    mapping (address => uint256[]) internal _tokensByGovernance;
+    mapping(string => uint256) internal _tokenBySymbol;
+    mapping(address => uint256) internal _tokenByAddress;
+    mapping(address => uint256[]) internal _tokensByGovernance;
 }

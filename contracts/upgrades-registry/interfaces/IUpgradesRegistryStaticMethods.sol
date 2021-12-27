@@ -23,4 +23,4 @@ interface IUpgradesRegistryStaticMethods is
     IUpgradesRegistryUpgradesStaticMethods,
     IUpgradableStaticMethods,
     IUpgradeStaticMethods
-{ }
+{}

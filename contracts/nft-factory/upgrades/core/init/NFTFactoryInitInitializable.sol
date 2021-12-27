@@ -11,29 +11,23 @@ import "../../../../common/proxy/initialization/Initializable.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 
-
-contract NFTFactoryInitInitializable is
-    IInitializable,
-    Initializable,
-    NFTFactoryStorage
-{
+contract NFTFactoryInitInitializable is IInitializable, Initializable, NFTFactoryStorage {
     error EmptyUpgradesRegistry();
     error EmptyInventorySetup();
     error EmptyNFTSetup();
 
-    function initialize(bytes memory input) public override (IInitializable, Initializable) {
-        (
-            address upgradesRegistry,
-            address nftSetup,
-            address inventorySetup
-        ) = abi.decode(input, (address, address, address));
+    function initialize(bytes memory input) public override(IInitializable, Initializable) {
+        (address upgradesRegistry, address nftSetup, address inventorySetup) = abi.decode(
+            input,
+            (address, address, address)
+        );
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
         if (nftSetup == address(0x00)) revert EmptyNFTSetup();
         if (inventorySetup == address(0x00)) revert EmptyInventorySetup();
         _upgradesRegistry = upgradesRegistry;
         _nftSetup = nftSetup;
         _inventorySetup = inventorySetup;
-        
+
         _storeMethods(_methods[msg.sig]);
 
         super.initialize(input);

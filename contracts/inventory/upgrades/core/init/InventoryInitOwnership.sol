@@ -9,7 +9,6 @@ import "../../../../common/interfaces/IERC721.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 
-
 contract InventoryInitOwnership is InventoryStorage {
     modifier isOwner() {
         if (msg.sender != IERC721(_nftAddress).ownerOf(_nftId)) revert InventoryErrors.NotInventoryNftOwner();

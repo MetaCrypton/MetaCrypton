@@ -14,50 +14,63 @@ import "../../../interfaces/IInventoryEvents.sol";
 import "../../../../common/interfaces/IERC20.sol";
 import "../../../../common/interfaces/IERC165.sol";
 
-contract InventoryInitERC20 is
-    IInventoryERC20,
-    IInventoryERC20StaticMethods,
-    IInventoryEvents,
-    InventoryInitOwnership
-{
+contract InventoryInitERC20 is IInventoryERC20, IInventoryERC20StaticMethods, IInventoryEvents, InventoryInitOwnership {
     using InventoryInitAssets for *;
-    
+
     modifier verifyERC20Input(address token, uint256 amount) {
         if (token == address(0x00)) revert InventoryErrors.EmptyAddress();
         if (amount == 0) revert InventoryErrors.ZeroAmount();
         _;
     }
 
-    function depositERC20(address from, address token, uint256 amount, bytes calldata data) external override isOwner returns (bytes memory) {
+    function depositERC20(
+        address from,
+        address token,
+        uint256 amount,
+        bytes calldata data
+    ) external override isOwner returns (bytes memory) {
         _depositERC20(from, token, amount);
 
-        if (IERC165(address(this)).supportsInterface(IInventoryERC20Internal(address(0x00)).processDepositERC20.selector)) {
+        if (
+            IERC165(address(this)).supportsInterface(
+                IInventoryERC20Internal(address(0x00)).processDepositERC20.selector
+            )
+        ) {
             return IInventoryERC20Internal(address(this)).processDepositERC20(from, token, amount, data);
         }
         return new bytes(0);
     }
 
-    function withdrawERC20(address recipient, address token, uint256 amount, bytes calldata data) external override isOwner returns (bytes memory) {
+    function withdrawERC20(
+        address recipient,
+        address token,
+        uint256 amount,
+        bytes calldata data
+    ) external override isOwner returns (bytes memory) {
         _withdrawERC20(recipient, token, amount);
 
-        if (IERC165(address(this)).supportsInterface(IInventoryERC20Internal(address(0x00)).processWithdrawERC20.selector)) {
+        if (
+            IERC165(address(this)).supportsInterface(
+                IInventoryERC20Internal(address(0x00)).processWithdrawERC20.selector
+            )
+        ) {
             return IInventoryERC20Internal(address(this)).processWithdrawERC20(recipient, token, amount, data);
         }
         return new bytes(0);
     }
-    
+
     function getERC20s_(uint256 startIndex, uint256 number) external view override returns (ERC20Struct[] memory) {
         return getERC20s(startIndex, number);
     }
-    
+
     function getERC20Balance_(address token) external view override returns (uint256) {
         return getERC20Balance(token);
     }
-    
+
     function getERC20s(uint256 startIndex, uint256 number) public view override returns (ERC20Struct[] memory) {
         return _assetsSetListToERC20(_assetsSet._getAssets(startIndex, number));
     }
-    
+
     function getERC20Balance(address token) public view override returns (uint256) {
         uint256 id = _getERC20Id(token);
         uint256 index = _assetsSet._getAssetIndexById(id);
@@ -70,24 +83,20 @@ contract InventoryInitERC20 is
         return storedToken.amount;
     }
 
-    function _depositERC20(address from, address token, uint256 amount) internal verifyERC20Input(token, amount) {
-        emit DepositERC20(
-            from,
-            token,
-            amount
-        );
+    function _depositERC20(
+        address from,
+        address token,
+        uint256 amount
+    ) internal verifyERC20Input(token, amount) {
+        emit DepositERC20(from, token, amount);
 
         uint256 id = _getERC20Id(token);
         uint256 index = _assetsSet._getAssetIndexById(id);
 
         if (index == 0) {
             bytes memory data = abi.encode(ERC20Struct(token, amount));
-            
-            emit AssetAdded(
-                id,
-                AssetType.ERC20,
-                data
-            );
+
+            emit AssetAdded(id, AssetType.ERC20, data);
             _assetsSet._addAsset(id, AssetType.ERC20, data);
         } else {
             Asset storage asset = _assetsSet._getAssetByIndex(index);
@@ -104,12 +113,12 @@ contract InventoryInitERC20 is
         IERC20(token).transferFrom(from, address(this), amount);
     }
 
-    function _withdrawERC20(address recipient, address token, uint256 amount) internal verifyERC20Input(token, amount) {
-        emit WithdrawERC20(
-            recipient,
-            token,
-            amount
-        );
+    function _withdrawERC20(
+        address recipient,
+        address token,
+        uint256 amount
+    ) internal verifyERC20Input(token, amount) {
+        emit WithdrawERC20(recipient, token, amount);
 
         uint256 id = _getERC20Id(token);
         uint256 index = _assetsSet._getAssetIndexById(id);
@@ -159,8 +168,8 @@ contract InventoryInitERC20 is
 
         return tokens;
     }
-    
+
     function _getERC20Id(address token) internal pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(token)));
-    } 
+    }
 }

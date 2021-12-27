@@ -8,11 +8,7 @@ import "../../interfaces/INFTLootboxStaticMethods.sol";
 import "../../../common/upgradability/IUpgrade.sol";
 import "../../../common/upgradability/UpgradeErrors.sol";
 
-
-contract NFTLootboxUpgrade is
-    IUpgrade,
-    NFTStorage
-{
+contract NFTLootboxUpgrade is IUpgrade, NFTStorage {
     constructor() {
         _methods[IUpgrade(address(0x00)).applyUpgrade.selector] = address(this);
         _methods[IUpgrade(address(0x00)).getProxyId.selector] = address(this);
@@ -21,7 +17,7 @@ contract NFTLootboxUpgrade is
 
     function applyUpgrade() external override {
         if (msg.sender != address(this)) revert UpgradeErrors.ApplyUpgradeOnlyCallableByItself();
-        
+
         address upgradeAddress = _methods[msg.sig];
         _methods[INFTLootbox(address(0x00)).setLootNFT.selector] = upgradeAddress;
         _methods[INFTLootbox(address(0x00)).getLootNFT.selector] = upgradeAddress;
@@ -29,8 +25,7 @@ contract NFTLootboxUpgrade is
     }
 
     function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
-        return _methods[interfaceId] != address(0x00)
-            || interfaceId == type(IUpgrade).interfaceId;
+        return _methods[interfaceId] != address(0x00) || interfaceId == type(IUpgrade).interfaceId;
     }
 
     function getProxyId() external pure override returns (bytes32) {

@@ -5,16 +5,21 @@ pragma solidity ^0.8.0;
 import "./ProxyStorage.sol";
 import "./initialization/IInitializable.sol";
 import "../governance/Governable.sol";
+import "../upgradability/IProxyUpgradable.sol";
 import "../interfaces/IERC165.sol";
 
-contract Proxy is Governable, ProxyStorage {
+contract Proxy is IProxyUpgradable, Governable, ProxyStorage {
     error EmptySetupAddress();
     error EmptyInterfaceAddress();
     error SameInterfaceAddress();
 
     event Upgraded(address indexed implementation);
 
-    constructor(address interfaceAddress, address setup, address governance) {
+    constructor(
+        address interfaceAddress,
+        address setup,
+        address governance
+    ) {
         if (interfaceAddress == address(0x00)) revert Proxy.EmptyInterfaceAddress();
         if (setup == address(0x00)) revert Proxy.EmptySetupAddress();
         if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
@@ -29,9 +34,10 @@ contract Proxy is Governable, ProxyStorage {
         _methods[IERC165.supportsInterface.selector] = setup;
     }
 
+    // solhint-disable-next-line comprehensive-interface
     receive() external payable virtual {}
 
-
+    // solhint-disable-next-line comprehensive-interface
     fallback() external payable {
         address impl = _interfaceAddress;
 
@@ -52,14 +58,14 @@ contract Proxy is Governable, ProxyStorage {
         }
     }
 
-    function upgradeTo(address newInterface) external requestPermission {
+    function upgradeTo(address newInterface) external override requestPermission {
         if (newInterface == address(0x00)) revert EmptyInterfaceAddress();
         if (_interfaceAddress == newInterface) revert SameInterfaceAddress();
         _interfaceAddress = newInterface;
         emit Upgraded(newInterface);
     }
 
-    function implementation() external view returns (address) {
+    function implementation() external view override returns (address) {
         return _interfaceAddress;
     }
 }

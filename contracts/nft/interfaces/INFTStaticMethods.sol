@@ -87,4 +87,4 @@ interface INFTStaticMethods is
     INFTERC721MetadataStaticMethods,
     IUpgradableStaticMethods,
     IUpgradeStaticMethods
-{ }
+{}

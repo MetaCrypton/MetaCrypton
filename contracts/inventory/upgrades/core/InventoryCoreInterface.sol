@@ -15,7 +15,11 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         _delegateCall();
     }
 
-    function withdrawEther(address recipient, uint256 amount, bytes calldata data) external override returns (bytes memory result) {
+    function withdrawEther(
+        address recipient,
+        uint256 amount,
+        bytes calldata data
+    ) external override returns (bytes memory result) {
         recipient;
         amount;
         data;
@@ -23,7 +27,12 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         _delegateCall();
     }
 
-    function depositERC20(address from, address token, uint256 amount, bytes calldata data) external override returns (bytes memory result) {
+    function depositERC20(
+        address from,
+        address token,
+        uint256 amount,
+        bytes calldata data
+    ) external override returns (bytes memory result) {
         from;
         token;
         amount;
@@ -32,7 +41,12 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         _delegateCall();
     }
 
-    function withdrawERC20(address recipient, address token, uint256 amount, bytes calldata data) external override returns (bytes memory result) {
+    function withdrawERC20(
+        address recipient,
+        address token,
+        uint256 amount,
+        bytes calldata data
+    ) external override returns (bytes memory result) {
         recipient;
         token;
         amount;
@@ -41,7 +55,12 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         _delegateCall();
     }
 
-    function depositERC721(address from, address token, uint256 tokenId, bytes calldata data) external override returns (bytes memory result) {
+    function depositERC721(
+        address from,
+        address token,
+        uint256 tokenId,
+        bytes calldata data
+    ) external override returns (bytes memory result) {
         from;
         token;
         tokenId;
@@ -50,7 +69,12 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         _delegateCall();
     }
 
-    function withdrawERC721(address recipient, address token, uint256 tokenId, bytes calldata data) external override returns (bytes memory result) {
+    function withdrawERC721(
+        address recipient,
+        address token,
+        uint256 tokenId,
+        bytes calldata data
+    ) external override returns (bytes memory result) {
         recipient;
         token;
         tokenId;
@@ -81,8 +105,13 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
     function applyUpgrade() external override {
         _delegateCall();
     }
-    
-    function getERC20s(uint256 startIndex, uint256 number) external view override returns (ERC20Struct[] memory result) {
+
+    function getERC20s(uint256 startIndex, uint256 number)
+        external
+        view
+        override
+        returns (ERC20Struct[] memory result)
+    {
         result;
         bytes memory data = abi.encodeWithSelector(
             IInventoryStaticMethods(address(0x00)).getERC20s_.selector,
@@ -91,7 +120,7 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         );
         _staticCall(data);
     }
-    
+
     function getERC20Balance(address token) external view override returns (uint256 result) {
         result;
         bytes memory data = abi.encodeWithSelector(
@@ -100,8 +129,13 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         );
         _staticCall(data);
     }
-    
-    function getERC721s(uint256 startIndex, uint256 number) external view override returns (ERC721Struct[] memory result) {
+
+    function getERC721s(uint256 startIndex, uint256 number)
+        external
+        view
+        override
+        returns (ERC721Struct[] memory result)
+    {
         result;
         bytes memory data = abi.encodeWithSelector(
             IInventoryStaticMethods(address(0x00)).getERC721s_.selector,
@@ -110,7 +144,7 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
         );
         _staticCall(data);
     }
-    
+
     function isERC721Owner(address token, uint256 tokenId) external view override returns (bool result) {
         result;
         bytes memory data = abi.encodeWithSelector(
@@ -129,13 +163,17 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
 
     function getCurrentUpgrades() external view override returns (uint256[] memory upgradesIndexes) {
         upgradesIndexes;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector
+        );
         _staticCall(data);
     }
 
     function getMaxPossibleUpgradeIndex() external view override returns (uint256 index) {
         index;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector
+        );
         _staticCall(data);
     }
 

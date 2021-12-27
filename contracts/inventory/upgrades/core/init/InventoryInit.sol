@@ -16,4 +16,4 @@ contract InventoryInit is
     InventoryInitInitializable,
     InventoryInitUpgradable,
     InventoryInitUpgrade
-{ }
+{}

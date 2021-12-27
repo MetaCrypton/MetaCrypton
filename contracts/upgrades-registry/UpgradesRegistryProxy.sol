@@ -6,5 +6,9 @@ import "./UpgradesRegistryStorage.sol";
 import "../common/proxy/Proxy.sol";
 
 contract UpgradesRegistryProxy is Proxy, UpgradesRegistryStorage {
-    constructor(address interfaceAddress, address setup, address governance) Proxy(interfaceAddress, setup, governance) { }
+    constructor(
+        address interfaceAddress,
+        address setup,
+        address governance
+    ) Proxy(interfaceAddress, setup, governance) {}
 }

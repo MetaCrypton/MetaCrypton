@@ -7,12 +7,7 @@ import "../../../../common/governance/interfaces/IGovernable.sol";
 import "../../../../common/governance/Governable.sol";
 import "../../../../common/governance/GovernableErrors.sol";
 
-
-contract NFTInitGovernable is
-    IGovernable,
-    Governable,
-    NFTStorage
-{
+contract NFTInitGovernable is IGovernable, Governable, NFTStorage {
     function setGovernance(address governance) external override requestPermission {
         if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
         if (governance == _governance) revert GovernableErrors.SameGovernance();

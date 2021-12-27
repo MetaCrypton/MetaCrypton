@@ -1,13 +1,16 @@
 {
-  "name": "MetaCrypton",
+  "name": "meta-crypton",
   "version": "1.0.0",
   "description": "Meta NFT constructor",
   "scripts": {
-    "test": "test"
+    "test": "npm run prettier && npm run lint && npx hardhat test",
+    "compile": "npm run prettier && npm run lint && npx hardhat compile",
+    "prettier": "prettier --write 'contracts/**/*.sol'",
+    "lint": "solhint 'contracts/**/*.sol'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BaldyAsh/MetaCrypton.git"
+    "url": "git+https://github.com/MetaCrypton/MetaCrypton.git"
   },
   "keywords": [
     "NFT",
@@ -18,15 +21,19 @@
   "author": "Anton Grigorev aka BaldyAsh",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/BaldyAsh/MetaCrypton/issues"
+    "url": "https://github.com/MetaCrypton/MetaCrypton/issues"
   },
-  "homepage": "https://github.com/BaldyAsh/MetaCrypton#readme",
+  "homepage": "https://github.com/MetaCrypton/MetaCrypton#readme",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.1",
+    "prettier": "^2.4.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.18",
+    "solhint": "^3.3.6",
+    "solhint-plugin-prettier": "0.0.5",
     "hardhat": "^2.7.0"
   },
   "dependencies": {

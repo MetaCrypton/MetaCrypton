@@ -16,4 +16,4 @@ contract UpgradesRegistryInit is
     UpgradesRegistryInitInitializable,
     UpgradesRegistryInitUpgradable,
     UpgradesRegistryInitUpgrade
-{ }
+{}

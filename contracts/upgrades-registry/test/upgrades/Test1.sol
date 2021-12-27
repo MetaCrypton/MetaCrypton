@@ -11,16 +11,7 @@ import "../../../common/governance/Governable.sol";
 import "../../../common/upgradability/IUpgrade.sol";
 import "../../../common/upgradability/IUpgradable.sol";
 
-
-contract Test1 is
-    ITest,
-    IUpgrade,
-    IUpgradable,
-    IInitializable,
-    Initializable,
-    Governable,
-    TestStorage
-{
+contract Test1 is ITest, IUpgrade, IUpgradable, IInitializable, Initializable, Governable, TestStorage {
     error EmptyUpgradesRegistry();
 
     function upgrade(uint256 upgradeIndex) external override requestPermission {
@@ -38,15 +29,16 @@ contract Test1 is
     function getMaxPossibleUpgradeIndex() external view override returns (uint256) {
         return IUpgradesRegistry(_upgradesRegistry).getProxyMaxPossibleUpgradeIndex(PROXY_ID);
     }
-    
+
     function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
-        return _methods[interfaceId] != address(0x00)
-            || interfaceId == type(IERC165).interfaceId
-            || interfaceId == type(IUpgradable).interfaceId
-            || interfaceId == type(IUpgrade).interfaceId
-            || interfaceId == type(ITest).interfaceId;
+        return
+            _methods[interfaceId] != address(0x00) ||
+            interfaceId == type(IERC165).interfaceId ||
+            interfaceId == type(IUpgradable).interfaceId ||
+            interfaceId == type(IUpgrade).interfaceId ||
+            interfaceId == type(ITest).interfaceId;
     }
-    
+
     function test() external pure override returns (uint256) {
         return 1;
     }
@@ -58,9 +50,9 @@ contract Test1 is
     function applyUpgrade() external pure override {
         revert InitializableErrors.NoApplyUpgradeOnInit();
     }
-    
-    function initialize(bytes memory input) public override (IInitializable, Initializable) {
-        (address upgradesRegistry) = abi.decode(input, (address));
+
+    function initialize(bytes memory input) public override(IInitializable, Initializable) {
+        address upgradesRegistry = abi.decode(input, (address));
         if (upgradesRegistry == address(0x00)) revert EmptyUpgradesRegistry();
         _upgradesRegistry = upgradesRegistry;
 

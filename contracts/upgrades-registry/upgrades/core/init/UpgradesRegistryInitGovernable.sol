@@ -7,12 +7,7 @@ import "../../../../common/governance/interfaces/IGovernable.sol";
 import "../../../../common/governance/Governable.sol";
 import "../../../../common/governance/GovernableErrors.sol";
 
-
-contract UpgradesRegistryInitGovernable is
-    IGovernable,
-    Governable,
-    UpgradesRegistryStorage
-{
+contract UpgradesRegistryInitGovernable is IGovernable, Governable, UpgradesRegistryStorage {
     function setGovernance(address governance) external override requestPermission {
         if (governance == address(0x00)) revert GovernableErrors.EmptyGovernance();
         if (governance == _governance) revert GovernableErrors.SameGovernance();

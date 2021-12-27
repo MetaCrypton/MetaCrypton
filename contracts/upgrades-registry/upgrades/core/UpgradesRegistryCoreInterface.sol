@@ -41,10 +41,7 @@ contract UpgradesRegistryCoreInterface is IUpgradesRegistry, IUpgradable, IUpgra
 
     function getProxyId(address proxyAddress) external view override returns (bytes32 result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            bytes4(keccak256("getProxyId_(address)")),
-            proxyAddress
-        );
+        bytes memory data = abi.encodeWithSelector(bytes4(keccak256("getProxyId_(address)")), proxyAddress);
         _staticCall(data);
     }
 
@@ -57,7 +54,12 @@ contract UpgradesRegistryCoreInterface is IUpgradesRegistry, IUpgradable, IUpgra
         _staticCall(data);
     }
 
-    function getProxyCurrentUpgrades(address proxyAddress) external view override returns (uint256[] memory upgradesIndexes) {
+    function getProxyCurrentUpgrades(address proxyAddress)
+        external
+        view
+        override
+        returns (uint256[] memory upgradesIndexes)
+    {
         upgradesIndexes;
         bytes memory data = abi.encodeWithSelector(
             IUpgradesRegistryStaticMethods(address(0x00)).getProxyCurrentUpgrades_.selector,
@@ -77,13 +79,17 @@ contract UpgradesRegistryCoreInterface is IUpgradesRegistry, IUpgradable, IUpgra
 
     function getCurrentUpgrades() external view override returns (uint256[] memory upgradesIndexes) {
         upgradesIndexes;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector
+        );
         _staticCall(data);
     }
 
     function getMaxPossibleUpgradeIndex() external view override returns (uint256 index) {
         index;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector
+        );
         _staticCall(data);
     }
 

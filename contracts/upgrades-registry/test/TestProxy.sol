@@ -6,5 +6,9 @@ import "./TestStorage.sol";
 import "../../common/proxy/Proxy.sol";
 
 contract TestProxy is Proxy, TestStorage {
-    constructor(address interfaceAddress, address setup, address governance) Proxy(interfaceAddress, setup, governance) { }
+    constructor(
+        address interfaceAddress,
+        address setup,
+        address governance
+    ) Proxy(interfaceAddress, setup, governance) {}
 }

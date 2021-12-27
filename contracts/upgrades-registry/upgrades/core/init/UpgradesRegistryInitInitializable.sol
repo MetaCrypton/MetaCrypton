@@ -8,12 +8,8 @@ import "../../../interfaces/IUpgradesRegistryStaticMethods.sol";
 import "../../../../common/proxy/initialization/IInitializable.sol";
 import "../../../../common/proxy/initialization/Initializable.sol";
 
-contract UpgradesRegistryInitInitializable is
-    IInitializable,
-    Initializable,
-    UpgradesRegistryInitCommon
-{
-    function initialize(bytes memory input) public override (IInitializable, Initializable) {
+contract UpgradesRegistryInitInitializable is IInitializable, Initializable, UpgradesRegistryInitCommon {
+    function initialize(bytes memory input) public override(IInitializable, Initializable) {
         address init = _methods[msg.sig];
         _storeMethods(init);
         _storeUpgrade(PROXY_ID, init);
@@ -37,7 +33,9 @@ contract UpgradesRegistryInitInitializable is
         _methods[bytes4(keccak256("getProxyId_(address)"))] = upgradeAddress;
         _methods[IUpgradesRegistryStaticMethods(address(0x00)).isProxyRegistered_.selector] = upgradeAddress;
         _methods[IUpgradesRegistryStaticMethods(address(0x00)).getProxyCurrentUpgrades_.selector] = upgradeAddress;
-        _methods[IUpgradesRegistryStaticMethods(address(0x00)).getProxyMaxPossibleUpgradeIndex_.selector] = upgradeAddress;
+        _methods[
+            IUpgradesRegistryStaticMethods(address(0x00)).getProxyMaxPossibleUpgradeIndex_.selector
+        ] = upgradeAddress;
 
         _methods[IUpgradable(address(0x00)).upgrade.selector] = upgradeAddress;
         _methods[IUpgradable(address(0x00)).getCurrentUpgrades.selector] = upgradeAddress;

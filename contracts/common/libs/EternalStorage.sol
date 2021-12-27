@@ -3,18 +3,18 @@
 pragma solidity ^0.8.0;
 
 struct EternalStorage {
-    mapping (bytes32 => uint) uints;
-    mapping (bytes32 => int) ints;
-    mapping (bytes32 => address) addresses;
-    mapping (bytes32 => bytes32) bytes32s;
-    mapping (bytes32 => bool) bools;
-    mapping (bytes32 => bytes) bytesValues;
-    mapping (bytes32 => uint[]) uintArrays;
-    mapping (bytes32 => int[]) intArrays;
-    mapping (bytes32 => address[]) addressArrays;
-    mapping (bytes32 => bytes32[]) bytes32Arrays;
-    mapping (bytes32 => bool[]) boolArrays;
-    mapping (bytes32 => bytes[]) bytesArrays;
+    mapping(bytes32 => uint) uints;
+    mapping(bytes32 => int) ints;
+    mapping(bytes32 => address) addresses;
+    mapping(bytes32 => bytes32) bytes32s;
+    mapping(bytes32 => bool) bools;
+    mapping(bytes32 => bytes) bytesValues;
+    mapping(bytes32 => uint[]) uintArrays;
+    mapping(bytes32 => int[]) intArrays;
+    mapping(bytes32 => address[]) addressArrays;
+    mapping(bytes32 => bytes32[]) bytes32Arrays;
+    mapping(bytes32 => bool[]) boolArrays;
+    mapping(bytes32 => bytes[]) bytesArrays;
 }
 
 library EternalStorageLib {
@@ -194,11 +194,19 @@ library EternalStorageLib {
         return eternalStorage.intArrays[key];
     }
 
-    function _getAddressArray(EternalStorage storage eternalStorage, bytes32 key) internal view returns (address[] memory) {
+    function _getAddressArray(EternalStorage storage eternalStorage, bytes32 key)
+        internal
+        view
+        returns (address[] memory)
+    {
         return eternalStorage.addressArrays[key];
     }
 
-    function _getBytes32Array(EternalStorage storage eternalStorage, bytes32 key) internal view returns (bytes32[] memory) {
+    function _getBytes32Array(EternalStorage storage eternalStorage, bytes32 key)
+        internal
+        view
+        returns (bytes32[] memory)
+    {
         return eternalStorage.bytes32Arrays[key];
     }
 

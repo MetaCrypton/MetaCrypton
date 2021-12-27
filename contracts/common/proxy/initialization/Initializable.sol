@@ -12,7 +12,7 @@ contract Initializable is IInitializable, ProxyStorage {
         _;
     }
 
-    function initialize(bytes memory) public override virtual isInitializer(_initializerAddress) {
+    function initialize(bytes memory) public virtual override isInitializer(_initializerAddress) {
         delete _initializerAddress;
         delete _methods[msg.sig];
     }

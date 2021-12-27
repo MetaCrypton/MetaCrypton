@@ -34,8 +34,10 @@ contract NFTERC721 is
      * - `from` cannot be the zero address.
      * - `to` cannot be the zero address.
      * - `tokenId` token must exist and be owned by `from`.
-     * - If the caller is not `from`, it must be have been allowed to move this token by either {approve} or {setApprovalForAll}.
-     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+     * - If the caller is not `from`, it must be have been allowed to move this token by either
+     * {approve} or {setApprovalForAll}.
+     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received},
+     * which is called upon a safe transfer.
      *
      * Emits a {Transfer} event.
      */
@@ -66,33 +68,8 @@ contract NFTERC721 is
         address to,
         uint256 tokenId
     ) external override {
-        if(!_tokensSet._safeIsApprovedOrOwner(msg.sender, tokenId)) revert NFTErrors.TransferNotFromOwnerNorApproved();
+        if (!_tokensSet._safeIsApprovedOrOwner(msg.sender, tokenId)) revert NFTErrors.TransferNotFromOwnerNorApproved();
         _tokensSet._transfer(from, to, tokenId);
-
-        emit Transfer(from, to, tokenId);
-    }
-
-    /**
-     * @dev Safely transfers `tokenId` token from `from` to `to`.
-     *
-     * Requirements:
-     *
-     * - `from` cannot be the zero address.
-     * - `to` cannot be the zero address.
-     * - `tokenId` token must exist and be owned by `from`.
-     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
-     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
-     *
-     * Emits a {Transfer} event.
-     */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId,
-        bytes memory data
-    ) public override {
-        if(!_tokensSet._safeIsApprovedOrOwner(msg.sender, tokenId)) revert NFTErrors.TransferNotFromOwnerNorApproved();
-        _tokensSet._safeTransfer(from, to, tokenId, data);
 
         emit Transfer(from, to, tokenId);
     }
@@ -173,6 +150,32 @@ contract NFTERC721 is
      */
     function isApprovedForAll_(address owner, address operator) external view override returns (bool) {
         return isApprovedForAll(owner, operator);
+    }
+
+    /**
+     * @dev Safely transfers `tokenId` token from `from` to `to`.
+     *
+     * Requirements:
+     *
+     * - `from` cannot be the zero address.
+     * - `to` cannot be the zero address.
+     * - `tokenId` token must exist and be owned by `from`.
+     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
+     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received},
+     * which is called upon a safe transfer.
+     *
+     * Emits a {Transfer} event.
+     */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory data
+    ) public override {
+        if (!_tokensSet._safeIsApprovedOrOwner(msg.sender, tokenId)) revert NFTErrors.TransferNotFromOwnerNorApproved();
+        _tokensSet._safeTransfer(from, to, tokenId, data);
+
+        emit Transfer(from, to, tokenId);
     }
 
     /**

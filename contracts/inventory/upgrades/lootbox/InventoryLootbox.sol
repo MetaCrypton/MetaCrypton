@@ -45,15 +45,11 @@ contract InventoryLootbox is
 
         if (index != 0) revert InventoryErrors.ExistingToken();
         bytes memory data = abi.encode(ERC721Struct(token, tokenId));
-        emit AssetAdded(
-            id,
-            AssetType.ERC721,
-            data
-        );
+        emit AssetAdded(id, AssetType.ERC721, data);
         _assetsSet._addAsset(id, AssetType.ERC721, data);
     }
 
     function _getERC721Id(address token, uint256 tokenId) internal pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(token, tokenId)));
-    } 
+    }
 }

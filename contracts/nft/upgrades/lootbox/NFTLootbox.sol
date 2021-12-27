@@ -9,15 +9,10 @@ import "../../interfaces/INFTLootboxStaticMethods.sol";
 import "../../../common/governance/Governable.sol";
 import "../../../common/libs/EternalStorage.sol";
 
-contract NFTLootbox is
-    INFTLootbox,
-    INFTLootboxStaticMethods,
-    Governable,
-    NFTLootboxUpgrade
-{
+contract NFTLootbox is INFTLootbox, INFTLootboxStaticMethods, Governable, NFTLootboxUpgrade {
     using EternalStorageLib for *;
 
-    bytes32 constant internal LOOT_NFT = keccak256(abi.encodePacked("Loot NFT"));
+    bytes32 internal constant LOOT_NFT = keccak256(abi.encodePacked("Loot NFT"));
 
     function setLootNFT(address lootNFT) external override requestPermission {
         if (lootNFT == address(0x00)) revert NFTErrors.EmptyLootNFT();

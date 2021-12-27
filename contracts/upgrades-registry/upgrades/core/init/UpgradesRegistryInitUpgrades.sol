@@ -29,7 +29,12 @@ contract UpgradesRegistryInitUpgrades is
         return upgradeAddress;
     }
 
-    function getProxyCurrentUpgrades_(address proxyAddress) external view override returns (uint256[] memory upgradesIndexes) {
+    function getProxyCurrentUpgrades_(address proxyAddress)
+        external
+        view
+        override
+        returns (uint256[] memory upgradesIndexes)
+    {
         return getProxyCurrentUpgrades(proxyAddress);
     }
 
@@ -37,7 +42,12 @@ contract UpgradesRegistryInitUpgrades is
         return getProxyMaxPossibleUpgradeIndex(proxyId);
     }
 
-    function getProxyCurrentUpgrades(address proxyAddress) public view override returns (uint256[] memory upgradesIndexes) {
+    function getProxyCurrentUpgrades(address proxyAddress)
+        public
+        view
+        override
+        returns (uint256[] memory upgradesIndexes)
+    {
         return _getCurrentUpgrades(proxyAddress);
     }
 

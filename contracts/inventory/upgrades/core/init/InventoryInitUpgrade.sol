@@ -9,12 +9,7 @@ import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradeStaticMethods.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 
-
-contract InventoryInitUpgrade is
-    IUpgrade,
-    IUpgradeStaticMethods,
-    InventoryStorage
-{
+contract InventoryInitUpgrade is IUpgrade, IUpgradeStaticMethods, InventoryStorage {
     function supportsInterface_(bytes4 interfaceId) external view override returns (bool) {
         return supportsInterface(interfaceId);
     }
@@ -28,11 +23,12 @@ contract InventoryInitUpgrade is
     }
 
     function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
-        return _methods[interfaceId] != address(0x00)
-            || interfaceId == type(IERC165).interfaceId
-            || interfaceId == type(IUpgradable).interfaceId
-            || interfaceId == type(IUpgrade).interfaceId
-            || interfaceId == type(IInventory).interfaceId;
+        return
+            _methods[interfaceId] != address(0x00) ||
+            interfaceId == type(IERC165).interfaceId ||
+            interfaceId == type(IUpgradable).interfaceId ||
+            interfaceId == type(IUpgrade).interfaceId ||
+            interfaceId == type(IInventory).interfaceId;
     }
 
     function getProxyId() public pure override returns (bytes32) {

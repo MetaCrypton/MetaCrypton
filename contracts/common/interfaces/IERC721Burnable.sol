@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 // Modified copyright © 2021 Anton "BaldyAsh" Grigorev. All rights reserved.
 // Original copyright OpenZeppelin Contracts v4.4.0 (token/ERC721/extensions/ERC721Burnable.sol)

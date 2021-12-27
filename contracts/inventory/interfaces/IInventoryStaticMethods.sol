@@ -8,13 +8,13 @@ import "../../common/upgradability/IUpgradeStaticMethods.sol";
 
 interface IInventoryERC20StaticMethods {
     function getERC20s_(uint256 startIndex, uint256 number) external view returns (ERC20Struct[] memory);
-    
+
     function getERC20Balance_(address token) external view returns (uint256);
 }
 
 interface IInventoryERC721StaticMethods {
     function getERC721s_(uint256 startIndex, uint256 number) external view returns (ERC721Struct[] memory);
-    
+
     function isERC721Owner_(address token, uint256 tokenId) external view returns (bool);
 }
 
@@ -28,4 +28,4 @@ interface IInventoryStaticMethods is
     IInventoryERCEtherStaticMethods,
     IUpgradableStaticMethods,
     IUpgradeStaticMethods
-{ }
+{}

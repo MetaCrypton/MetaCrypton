@@ -12,11 +12,7 @@ import "../../../../common/interfaces/IERC721Enumerable.sol";
  * @title ERC-721 Non-Fungible Token Standard, optional enumeration extension
  * @dev See https://eips.ethereum.org/EIPS/eip-721
  */
-contract NFTERC721Enumerable is
-    IERC721Enumerable,
-    INFTERC721EnumerableStaticMethods,
-    NFTERC721Upgrade
-{
+contract NFTERC721Enumerable is IERC721Enumerable, INFTERC721EnumerableStaticMethods, NFTERC721Upgrade {
     /**
      * @dev Returns the total amount of tokens stored by the contract.
      */

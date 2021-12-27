@@ -20,4 +20,4 @@ interface INFT is
     IERC721Mintable,
     IERC721Metadata,
     INFTInventory
-{ }
+{}

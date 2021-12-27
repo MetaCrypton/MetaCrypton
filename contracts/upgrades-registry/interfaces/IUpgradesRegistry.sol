@@ -12,4 +12,4 @@ interface IUpgradesRegistry is
     IUpgradesRegistryEvents,
     IUpgradesRegistryProxies,
     IUpgradesRegistryUpgrades
-{ }
+{}

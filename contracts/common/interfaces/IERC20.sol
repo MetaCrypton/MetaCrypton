@@ -9,14 +9,18 @@ pragma solidity ^0.8.0;
  */
 interface IERC20 {
     /**
-     * @dev Returns the amount of tokens in existence.
+     * @dev Emitted when `value` tokens are moved from one account (`from`) to
+     * another (`to`).
+     *
+     * Note that `value` may be zero.
      */
-    function totalSupply() external view returns (uint256);
+    event Transfer(address indexed from, address indexed to, uint256 value);
 
     /**
-     * @dev Returns the amount of tokens owned by `account`.
+     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
+     * a call to {approve}. `value` is the new allowance.
      */
-    function balanceOf(address account) external view returns (uint256);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     /**
      * @dev Moves `amount` tokens from the caller's account to `recipient`.
@@ -26,15 +30,6 @@ interface IERC20 {
      * Emits a {Transfer} event.
      */
     function transfer(address recipient, uint256 amount) external returns (bool);
-
-    /**
-     * @dev Returns the remaining number of tokens that `spender` will be
-     * allowed to spend on behalf of `owner` through {transferFrom}. This is
-     * zero by default.
-     *
-     * This value changes when {approve} or {transferFrom} are called.
-     */
-    function allowance(address owner, address spender) external view returns (uint256);
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -68,16 +63,21 @@ interface IERC20 {
     ) external returns (bool);
 
     /**
-     * @dev Emitted when `value` tokens are moved from one account (`from`) to
-     * another (`to`).
-     *
-     * Note that `value` may be zero.
+     * @dev Returns the amount of tokens in existence.
      */
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    function totalSupply() external view returns (uint256);
 
     /**
-     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
-     * a call to {approve}. `value` is the new allowance.
+     * @dev Returns the amount of tokens owned by `account`.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    function balanceOf(address account) external view returns (uint256);
+
+    /**
+     * @dev Returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through {transferFrom}. This is
+     * zero by default.
+     *
+     * This value changes when {approve} or {transferFrom} are called.
+     */
+    function allowance(address owner, address spender) external view returns (uint256);
 }

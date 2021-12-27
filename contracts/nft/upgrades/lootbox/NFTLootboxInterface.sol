@@ -14,9 +14,7 @@ contract NFTLootboxInterface is INFTLootbox, NFTCoreInterface {
 
     function getLootNFT() external view override returns (address result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTLootboxStaticMethods(address(0x00)).getLootNFT_.selector
-        );
+        bytes memory data = abi.encodeWithSelector(INFTLootboxStaticMethods(address(0x00)).getLootNFT_.selector);
         _staticCall(data);
     }
 }

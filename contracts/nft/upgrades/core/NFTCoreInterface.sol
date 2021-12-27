@@ -18,8 +18,10 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      * - `from` cannot be the zero address.
      * - `to` cannot be the zero address.
      * - `tokenId` token must exist and be owned by `from`.
-     * - If the caller is not `from`, it must be have been allowed to move this token by either {approve} or {setApprovalForAll}.
-     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+     * - If the caller is not `from`, it must be have been allowed to move this token by either
+     * {approve} or {setApprovalForAll}.
+     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received},
+     * which is called upon a safe transfer.
      *
      * Emits a {Transfer} event.
      */
@@ -102,8 +104,10 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      * - `from` cannot be the zero address.
      * - `to` cannot be the zero address.
      * - `tokenId` token must exist and be owned by `from`.
-     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
-     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+     * - If the caller is not `from`, it must be approved to move this token by either
+     * {approve} or {setApprovalForAll}.
+     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received},
+     * which is called upon a safe transfer.
      *
      * Emits a {Transfer} event.
      */
@@ -191,10 +195,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function balanceOf(address owner) external view override returns (uint256 balance) {
         balance;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).balanceOf_.selector,
-            owner
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).balanceOf_.selector, owner);
         _staticCall(data);
     }
 
@@ -207,10 +208,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function ownerOf(uint256 tokenId) external view override returns (address owner) {
         owner;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).ownerOf_.selector,
-            tokenId
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).ownerOf_.selector, tokenId);
         _staticCall(data);
     }
 
@@ -223,10 +221,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function getApproved(uint256 tokenId) external view override returns (address operator) {
         operator;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).getApproved_.selector,
-            tokenId
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).getApproved_.selector, tokenId);
         _staticCall(data);
     }
 
@@ -250,9 +245,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function totalSupply() external view override returns (uint256 result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).totalSupply_.selector
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).totalSupply_.selector);
         _staticCall(data);
     }
 
@@ -276,10 +269,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function tokenByIndex(uint256 index) external view override returns (uint256 result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).tokenByIndex_.selector,
-            index
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).tokenByIndex_.selector, index);
         _staticCall(data);
     }
 
@@ -288,9 +278,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function name() external view override returns (string memory result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).name_.selector
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).name_.selector);
         _staticCall(data);
     }
 
@@ -299,9 +287,7 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function symbol() external view override returns (string memory result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).symbol_.selector
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).symbol_.selector);
         _staticCall(data);
     }
 
@@ -310,19 +296,13 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
      */
     function tokenURI(uint256 tokenId) external view override returns (string memory result) {
         result;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).tokenURI_.selector,
-            tokenId
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).tokenURI_.selector, tokenId);
         _staticCall(data);
     }
 
     function inventoryOf(uint256 tokenId) external view override returns (address owner) {
         owner;
-        bytes memory data = abi.encodeWithSelector(
-            INFTStaticMethods(address(0x00)).inventoryOf_.selector,
-            tokenId
-        );
+        bytes memory data = abi.encodeWithSelector(INFTStaticMethods(address(0x00)).inventoryOf_.selector, tokenId);
         _staticCall(data);
     }
 
@@ -337,13 +317,17 @@ contract NFTCoreInterface is INFT, IUpgradable, IUpgrade, Interface {
 
     function getCurrentUpgrades() external view override returns (uint256[] memory upgradesIndexes) {
         upgradesIndexes;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector
+        );
         _staticCall(data);
     }
 
     function getMaxPossibleUpgradeIndex() external view override returns (uint256 index) {
         index;
-        bytes memory data = abi.encodeWithSelector(IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector);
+        bytes memory data = abi.encodeWithSelector(
+            IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector
+        );
         _staticCall(data);
     }
 
