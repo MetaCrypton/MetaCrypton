@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 import "../../../NFTStorage.sol";
 import "../../../interfaces/INFT.sol";
+import "../../../interfaces/INFTStaticMethods.sol";
 import "../../../../upgrades-registry/interfaces/IUpgradesRegistry.sol";
 import "../../../../common/proxy/initialization/IInitializable.sol";
 import "../../../../common/proxy/initialization/Initializable.sol";
@@ -45,12 +46,18 @@ contract NFTInitInitializable is
 
         _methods[INFT(address(0x00)).inventoryOf.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).tokenIdByInventory.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).inventoryOf_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).tokenIdByInventory_.selector] = upgradeAddress;
 
         _methods[IUpgradable(address(0x00)).upgrade.selector] = upgradeAddress;
         _methods[IUpgradable(address(0x00)).getCurrentUpgrades.selector] = upgradeAddress;
         _methods[IUpgradable(address(0x00)).getMaxPossibleUpgradeIndex.selector] = upgradeAddress;
+        _methods[IUpgradableStaticMethods(address(0x00)).getCurrentUpgrades_.selector] = upgradeAddress;
+        _methods[IUpgradableStaticMethods(address(0x00)).getMaxPossibleUpgradeIndex_.selector] = upgradeAddress;
 
         _methods[IUpgrade(address(0x00)).getProxyId.selector] = upgradeAddress;
         _methods[IUpgrade(address(0x00)).supportsInterface.selector] = upgradeAddress;
+        _methods[IUpgradeStaticMethods(address(0x00)).getProxyId_.selector] = upgradeAddress;
+        _methods[IUpgradeStaticMethods(address(0x00)).supportsInterface_.selector] = upgradeAddress;
     }
 }

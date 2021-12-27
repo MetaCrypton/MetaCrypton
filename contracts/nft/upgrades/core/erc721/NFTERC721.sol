@@ -8,6 +8,7 @@ import "./NFTERC721Metadata.sol";
 import "./NFTERC721Mintable.sol";
 import "./NFTERC721Upgrade.sol";
 import "../init/NFTInitCommon.sol";
+import "../../../interfaces/INFTStaticMethods.sol";
 import "../../../NFTErrors.sol";
 import "../../../../common/interfaces/IERC721.sol";
 
@@ -16,6 +17,7 @@ import "../../../../common/interfaces/IERC721.sol";
  */
 contract NFTERC721 is
     IERC721,
+    INFTERC721StaticMethods,
     NFTERC721Burnable,
     NFTERC721Enumerable,
     NFTERC721Metadata,
@@ -138,7 +140,45 @@ contract NFTERC721 is
     /**
      * @dev Returns the number of tokens in ``owner``'s account.
      */
-    function balanceOf(address owner) external view override returns (uint256 balance) {
+    function balanceOf_(address owner) external view override returns (uint256 balance) {
+        return balanceOf(owner);
+    }
+
+    /**
+     * @dev Returns the owner of the `tokenId` token.
+     *
+     * Requirements:
+     *
+     * - `tokenId` must exist.
+     */
+    function ownerOf_(uint256 tokenId) external view override returns (address owner) {
+        return ownerOf(tokenId);
+    }
+
+    /**
+     * @dev Returns the account approved for `tokenId` token.
+     *
+     * Requirements:
+     *
+     * - `tokenId` must exist.
+     */
+    function getApproved_(uint256 tokenId) external view override returns (address operator) {
+        return getApproved(tokenId);
+    }
+
+    /**
+     * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.
+     *
+     * See {setApprovalForAll}
+     */
+    function isApprovedForAll_(address owner, address operator) external view override returns (bool) {
+        return isApprovedForAll(owner, operator);
+    }
+
+    /**
+     * @dev Returns the number of tokens in ``owner``'s account.
+     */
+    function balanceOf(address owner) public view override returns (uint256 balance) {
         return _tokensSet.tokenIdsByOwner[owner].length;
     }
 
@@ -149,7 +189,7 @@ contract NFTERC721 is
      *
      * - `tokenId` must exist.
      */
-    function ownerOf(uint256 tokenId) external view override returns (address owner) {
+    function ownerOf(uint256 tokenId) public view override returns (address owner) {
         return _tokensSet._safeOwnerOf(tokenId);
     }
 
@@ -160,7 +200,7 @@ contract NFTERC721 is
      *
      * - `tokenId` must exist.
      */
-    function getApproved(uint256 tokenId) external view override returns (address operator) {
+    function getApproved(uint256 tokenId) public view override returns (address operator) {
         return _tokensSet._safeGetApproved(tokenId);
     }
 
@@ -169,7 +209,7 @@ contract NFTERC721 is
      *
      * See {setApprovalForAll}
      */
-    function isApprovedForAll(address owner, address operator) external view override returns (bool) {
+    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
         return _tokensSet._isApprovedForAll(owner, operator);
     }
 }

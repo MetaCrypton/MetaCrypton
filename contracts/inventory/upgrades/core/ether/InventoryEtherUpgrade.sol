@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 import "../../../InventoryStorage.sol";
 import "../../../interfaces/IInventory.sol";
+import "../../../interfaces/IInventoryStaticMethods.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/UpgradeErrors.sol";
 
@@ -25,6 +26,7 @@ contract InventoryEtherUpgrade is
         _methods[IInventory(address(0x00)).depositEther.selector] = upgradeAddress;
         _methods[IInventory(address(0x00)).withdrawEther.selector] = upgradeAddress;
         _methods[IInventory(address(0x00)).getEtherBalance.selector] = upgradeAddress;
+        _methods[IInventoryStaticMethods(address(0x00)).getEtherBalance_.selector] = upgradeAddress;
     }
 
     function supportsInterface(bytes4 interfaceId) external view override returns (bool) {

@@ -12,7 +12,7 @@ describe("Integration", function() {
     let upgradesRegistryUpgrade;
     let upgradesRegistryUpgradable;
 
-    let nftInterface;
+    let nftLootboxInterface;
 
     let inventoryLootboxInterface;
     let inventoryInit;
@@ -94,7 +94,7 @@ describe("Integration", function() {
     });
 
     it("Deploy nft setup and factory", async function() {
-        nftInterface = await deploy("Interface");
+        nftLootboxInterface = await deploy("NFTLootboxInterface");
         const nftInit = await deploy("NFTInit");
         const nftERC721 = await deploy("NFTERC721");
         const nftLootbox = await deploy("NFTLootbox");
@@ -123,7 +123,7 @@ describe("Integration", function() {
                 "TKN",
                 "uri"
             ],
-            nftInterface.address,
+            nftLootboxInterface.address,
             admin.address,
             inventoryLootboxInterface.address,
             [0, 1],

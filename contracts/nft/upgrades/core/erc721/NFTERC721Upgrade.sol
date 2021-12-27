@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 import "../../../NFTStorage.sol";
 import "../../../interfaces/INFT.sol";
+import "../../../interfaces/INFTStaticMethods.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/UpgradeErrors.sol";
 
@@ -32,16 +33,26 @@ contract NFTERC721Upgrade is
         _methods[INFT(address(0x00)).ownerOf.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).getApproved.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).isApprovedForAll.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).balanceOf_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).ownerOf_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).getApproved_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).isApprovedForAll_.selector] = upgradeAddress;
 
         _methods[INFT(address(0x00)).burn.selector] = upgradeAddress;
 
         _methods[INFT(address(0x00)).totalSupply.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).tokenOfOwnerByIndex.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).tokenByIndex.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).totalSupply_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).tokenOfOwnerByIndex_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).tokenByIndex_.selector] = upgradeAddress;
 
         _methods[INFT(address(0x00)).name.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).symbol.selector] = upgradeAddress;
         _methods[INFT(address(0x00)).tokenURI.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).name_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).symbol_.selector] = upgradeAddress;
+        _methods[INFTStaticMethods(address(0x00)).tokenURI_.selector] = upgradeAddress;
 
         _methods[INFT(address(0x00)).mint.selector] = upgradeAddress;
         _methods[bytes4(keccak256("safeMint(address)"))] = upgradeAddress;

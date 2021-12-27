@@ -6,14 +6,28 @@ import "../../../NFTStorage.sol";
 import "../../../interfaces/INFT.sol";
 import "../../../../common/proxy/initialization/InitializableErrors.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
+import "../../../../common/upgradability/IUpgradeStaticMethods.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 
 
 contract NFTInitUpgrade is
     IUpgrade,
+    IUpgradeStaticMethods,
     NFTStorage
 {
-    function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
+    function supportsInterface_(bytes4 interfaceId) external view override returns (bool) {
+        return supportsInterface(interfaceId);
+    }
+
+    function getProxyId_() external pure override returns (bytes32) {
+        return getProxyId();
+    }
+
+    function applyUpgrade() external pure override {
+        revert InitializableErrors.NoApplyUpgradeOnInit();
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
         return _methods[interfaceId] != address(0x00)
             || interfaceId == type(IERC165).interfaceId
             || interfaceId == type(IUpgradable).interfaceId
@@ -21,11 +35,7 @@ contract NFTInitUpgrade is
             || interfaceId == type(INFT).interfaceId;
     }
 
-    function getProxyId() external pure override returns (bytes32) {
+    function getProxyId() public pure override returns (bytes32) {
         return PROXY_ID;
-    }
-
-    function applyUpgrade() external pure override {
-        revert InitializableErrors.NoApplyUpgradeOnInit();
     }
 }

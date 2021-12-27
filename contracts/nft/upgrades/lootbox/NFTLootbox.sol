@@ -5,11 +5,13 @@ pragma solidity ^0.8.0;
 import "./NFTLootboxUpgrade.sol";
 import "../../NFTErrors.sol";
 import "../../interfaces/INFTLootbox.sol";
+import "../../interfaces/INFTLootboxStaticMethods.sol";
 import "../../../common/governance/Governable.sol";
 import "../../../common/libs/EternalStorage.sol";
 
 contract NFTLootbox is
     INFTLootbox,
+    INFTLootboxStaticMethods,
     Governable,
     NFTLootboxUpgrade
 {
@@ -26,7 +28,11 @@ contract NFTLootbox is
         _eternalStorage._setAddress(LOOT_NFT, lootNFT);
     }
 
-    function getLootNFT() external view override returns (address) {
+    function getLootNFT_() external view override returns (address) {
+        return getLootNFT();
+    }
+
+    function getLootNFT() public view override returns (address) {
         return _eternalStorage._getAddress(LOOT_NFT);
     }
 }

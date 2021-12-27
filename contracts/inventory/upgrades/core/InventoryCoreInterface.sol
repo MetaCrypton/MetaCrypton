@@ -83,8 +83,6 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
     }
     
     function getERC20s(uint256 startIndex, uint256 number) external view override returns (ERC20Struct[] memory result) {
-        startIndex;
-        number;
         result;
         bytes memory data = abi.encodeWithSelector(
             IInventoryStaticMethods(address(0x00)).getERC20s_.selector,
@@ -104,8 +102,6 @@ contract InventoryCoreInterface is IInventory, IUpgradable, IUpgrade, Interface 
     }
     
     function getERC721s(uint256 startIndex, uint256 number) external view override returns (ERC721Struct[] memory result) {
-        startIndex;
-        number;
         result;
         bytes memory data = abi.encodeWithSelector(
             IInventoryStaticMethods(address(0x00)).getERC721s_.selector,
