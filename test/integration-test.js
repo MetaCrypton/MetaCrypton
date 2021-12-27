@@ -71,9 +71,9 @@ describe("Integration", function() {
         [admin, alice, bob, charlie] = await ethers.getSigners();
         coder = ethers.utils.defaultAbiCoder;
 
-        const upgradesRegistryInterface = await deploy("Interface");
+        const upgradesRegistryCoreInterface = await deploy("UpgradesRegistryCoreInterface");
         const upgradesRegistryInit = await deploy("UpgradesRegistryInit");
-        const upgradesRegistryProxy = await deploy("UpgradesRegistryProxy", upgradesRegistryInterface.address, upgradesRegistryInit.address, governance.address);
+        const upgradesRegistryProxy = await deploy("UpgradesRegistryProxy", upgradesRegistryCoreInterface.address, upgradesRegistryInit.address, governance.address);
 
         const upgradesRegistryInitializable = await ethers.getContractAt("IInitializable", upgradesRegistryProxy.address);
         upgradesRegistryUpgrade = await ethers.getContractAt("IUpgrade", upgradesRegistryProxy.address);
@@ -101,9 +101,9 @@ describe("Integration", function() {
         await upgradesRegistry.registerUpgrade(nftERC721.address);
         await upgradesRegistry.registerUpgrade(nftLootbox.address);
 
-        const nftFactoryInterface = await deploy("NFTFactoryCoreInterface");
+        const nftFactoryCoreInterface = await deploy("NFTFactoryCoreInterface");
         const nftFactoryInit = await deploy("NFTFactoryInit");
-        nftFactoryProxy = await deploy("NFTFactoryProxy", nftFactoryInterface.address, nftFactoryInit.address, admin.address);
+        nftFactoryProxy = await deploy("NFTFactoryProxy", nftFactoryCoreInterface.address, nftFactoryInit.address, admin.address);
 
         const nftFactoryInitializable = await ethers.getContractAt("IInitializable", nftFactoryProxy.address);
         nftFactoryUpgrade = await ethers.getContractAt("IUpgrade", nftFactoryProxy.address);

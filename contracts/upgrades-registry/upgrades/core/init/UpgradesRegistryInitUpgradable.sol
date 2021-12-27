@@ -6,9 +6,11 @@ import "./UpgradesRegistryInitCommon.sol";
 import "../../../../common/governance/Governable.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
+import "../../../../common/upgradability/IUpgradableStaticMethods.sol";
 
 contract UpgradesRegistryInitUpgradable is
     IUpgradable,
+    IUpgradableStaticMethods,
     Governable,
     UpgradesRegistryInitCommon
 {
@@ -21,11 +23,19 @@ contract UpgradesRegistryInitUpgradable is
         delete _methods[selector];
     }
 
-    function getCurrentUpgrades() external view override returns (uint256[] memory) {
+    function getCurrentUpgrades_() external view override returns (uint256[] memory) {
+        return getCurrentUpgrades();
+    }
+
+    function getMaxPossibleUpgradeIndex_() external view override returns (uint256) {
+        return getMaxPossibleUpgradeIndex();
+    }
+
+    function getCurrentUpgrades() public view override returns (uint256[] memory) {
         return _getCurrentUpgrades(address(this));
     }
 
-    function getMaxPossibleUpgradeIndex() external view override returns (uint256) {
+    function getMaxPossibleUpgradeIndex() public view override returns (uint256) {
         return _getProxyMaxPossibleUpgradeIndex(PROXY_ID);
     }
 }

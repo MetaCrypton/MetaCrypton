@@ -5,11 +5,13 @@ pragma solidity ^0.8.0;
 import "./UpgradesRegistryInitCommon.sol";
 import "../../../interfaces/IUpgradesRegistryEvents.sol";
 import "../../../interfaces/IUpgradesRegistryUpgrades.sol";
+import "../../../interfaces/IUpgradesRegistryStaticMethods.sol";
 import "../../../../common/governance/Governable.sol";
 
 contract UpgradesRegistryInitUpgrades is
     IUpgradesRegistryEvents,
     IUpgradesRegistryUpgrades,
+    IUpgradesRegistryUpgradesStaticMethods,
     Governable,
     UpgradesRegistryInitCommon
 {
@@ -27,11 +29,19 @@ contract UpgradesRegistryInitUpgrades is
         return upgradeAddress;
     }
 
-    function getProxyCurrentUpgrades(address proxyAddress) external view override returns (uint256[] memory upgradesIndexes) {
+    function getProxyCurrentUpgrades_(address proxyAddress) external view override returns (uint256[] memory upgradesIndexes) {
+        return getProxyCurrentUpgrades(proxyAddress);
+    }
+
+    function getProxyMaxPossibleUpgradeIndex_(bytes32 proxyId) external view override returns (uint256 index) {
+        return getProxyMaxPossibleUpgradeIndex(proxyId);
+    }
+
+    function getProxyCurrentUpgrades(address proxyAddress) public view override returns (uint256[] memory upgradesIndexes) {
         return _getCurrentUpgrades(proxyAddress);
     }
 
-    function getProxyMaxPossibleUpgradeIndex(bytes32 proxyId) external view override returns (uint256 index) {
+    function getProxyMaxPossibleUpgradeIndex(bytes32 proxyId) public view override returns (uint256 index) {
         return _getProxyMaxPossibleUpgradeIndex(proxyId);
     }
 }

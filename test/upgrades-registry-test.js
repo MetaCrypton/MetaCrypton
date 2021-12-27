@@ -27,9 +27,9 @@ describe("Upgrades registry", function() {
         [admin, alice, bob, charlie] = await ethers.getSigners();
         coder = ethers.utils.defaultAbiCoder;
 
-        const upgradesRegistryInterface = await deploy("Interface");
+        const upgradesRegistryCoreInterface = await deploy("UpgradesRegistryCoreInterface");
         const upgradesRegistryInit = await deploy("UpgradesRegistryInit");
-        const upgradesRegistryProxy = await deploy("UpgradesRegistryProxy", upgradesRegistryInterface.address, upgradesRegistryInit.address, admin.address);
+        const upgradesRegistryProxy = await deploy("UpgradesRegistryProxy", upgradesRegistryCoreInterface.address, upgradesRegistryInit.address, admin.address);
 
         const upgradesRegistryInitializable = await ethers.getContractAt("IInitializable", upgradesRegistryProxy.address);
         upgradesRegistryUpgrade = await ethers.getContractAt("IUpgrade", upgradesRegistryProxy.address);

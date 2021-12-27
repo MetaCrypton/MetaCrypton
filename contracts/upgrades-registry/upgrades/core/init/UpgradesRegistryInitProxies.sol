@@ -4,11 +4,13 @@ pragma solidity ^0.8.0;
 
 import "./UpgradesRegistryInitCommon.sol";
 import "../../../interfaces/IUpgradesRegistryProxies.sol";
+import "../../../interfaces/IUpgradesRegistryStaticMethods.sol";
 import "../../../interfaces/IUpgradesRegistryEvents.sol";
 import "../../../../common/governance/Governable.sol";
 
 contract UpgradesRegistryInitProxies is
     IUpgradesRegistryProxies,
+    IUpgradesRegistryProxiesStaticMethods,
     IUpgradesRegistryEvents,
     Governable,
     UpgradesRegistryInitCommon
@@ -19,11 +21,19 @@ contract UpgradesRegistryInitProxies is
         emit ProxyRegistered(proxyId, proxyAddress);
     }
 
-    function getProxyId(address proxyAddress) external view override returns (bytes32) {
+    function getProxyId_(address proxyAddress) external view override returns (bytes32) {
+        return getProxyId(proxyAddress);
+    }
+
+    function isProxyRegistered_(address proxyAddress) external view override returns (bool) {
+        return isProxyRegistered(proxyAddress);
+    }
+
+    function getProxyId(address proxyAddress) public view override returns (bytes32) {
         return _getProxyId(proxyAddress);
     }
 
-    function isProxyRegistered(address proxyAddress) external view override returns (bool) {
+    function isProxyRegistered(address proxyAddress) public view override returns (bool) {
         return _isProxyRegistered(proxyAddress);
     }
 }

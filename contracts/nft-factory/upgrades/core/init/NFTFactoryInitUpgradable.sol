@@ -7,10 +7,12 @@ import "../../../../upgrades-registry/interfaces/IUpgradesRegistry.sol";
 import "../../../../common/governance/Governable.sol";
 import "../../../../common/upgradability/IUpgrade.sol";
 import "../../../../common/upgradability/IUpgradable.sol";
+import "../../../../common/upgradability/IUpgradableStaticMethods.sol";
 
 
 contract NFTFactoryInitUpgradable is
     IUpgradable,
+    IUpgradableStaticMethods,
     Governable,
     NFTFactoryStorage
 {
@@ -22,11 +24,19 @@ contract NFTFactoryInitUpgradable is
         delete _methods[IUpgrade(address(0x00)).applyUpgrade.selector];
     }
 
-    function getCurrentUpgrades() external view override returns (uint256[] memory) {
+    function getCurrentUpgrades_() external view override returns (uint256[] memory) {
+        return getCurrentUpgrades();
+    }
+
+    function getMaxPossibleUpgradeIndex_() external view override returns (uint256) {
+        return getMaxPossibleUpgradeIndex();
+    }
+
+    function getCurrentUpgrades() public view override returns (uint256[] memory) {
         return IUpgradesRegistry(_upgradesRegistry).getProxyCurrentUpgrades(address(this));
     }
 
-    function getMaxPossibleUpgradeIndex() external view override returns (uint256) {
+    function getMaxPossibleUpgradeIndex() public view override returns (uint256) {
         return IUpgradesRegistry(_upgradesRegistry).getProxyMaxPossibleUpgradeIndex(PROXY_ID);
     }
 }
