@@ -101,7 +101,7 @@ describe("Integration", function() {
         await upgradesRegistry.registerUpgrade(nftERC721.address);
         await upgradesRegistry.registerUpgrade(nftLootbox.address);
 
-        const nftFactoryInterface = await deploy("Interface");
+        const nftFactoryInterface = await deploy("NFTFactoryCoreInterface");
         const nftFactoryInit = await deploy("NFTFactoryInit");
         nftFactoryProxy = await deploy("NFTFactoryProxy", nftFactoryInterface.address, nftFactoryInit.address, admin.address);
 

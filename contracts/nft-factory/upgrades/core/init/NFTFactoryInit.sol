@@ -7,6 +7,7 @@ import "./NFTFactoryInitUpgradable.sol";
 import "./NFTFactoryInitUpgrade.sol";
 import "../../../NFTFactoryStructs.sol";
 import "../../../NFTFactoryErrors.sol";
+import "../../../interfaces/INFTFactoryStaticMethods.sol";
 import "../../../interfaces/INFTFactoryTokens.sol";
 import "../../../interfaces/INFTFactoryEvents.sol";
 import "../../../../upgrades-registry/interfaces/IUpgradesRegistry.sol";
@@ -15,6 +16,7 @@ import "../../../../common/governance/interfaces/IGovernable.sol";
 
 contract NFTFactoryInit is
     INFTFactoryTokens,
+    INFTFactoryTokensStaticMethods,
     INFTFactoryEvents,
     NFTFactoryInitInitializable,
     NFTFactoryInitUpgradable,
@@ -66,7 +68,31 @@ contract NFTFactoryInit is
         return token;
     }
 
-    function getTokens(uint256 startIndex, uint256 number) external view override returns (NFTToken[] memory) {
+    function getTokens_(uint256 startIndex, uint256 number) external view override returns (NFTToken[] memory) {
+        return getTokens(startIndex, number);
+    }
+    
+    function getTokensTotal_() external view override returns (uint256) {
+        return getTokensTotal();
+    }
+
+    function getTokensByGovernanceTotal_(address governance) external view override returns (uint256) {
+        return getTokensByGovernanceTotal(governance);
+    }
+
+    function getTokenByAddress_(address token) external view override returns (NFTToken memory) {
+        return getTokenByAddress(token);
+    }
+
+    function getTokenBySymbol_(string calldata symbol) external view override returns (NFTToken memory) {
+        return getTokenBySymbol(symbol);
+    }
+
+    function getTokensByGovernance_(address governance, uint256 startIndex, uint256 number) external view override returns (NFTToken[] memory) {
+        return getTokensByGovernance(governance, startIndex, number);
+    }
+
+    function getTokens(uint256 startIndex, uint256 number) public view override returns (NFTToken[] memory) {
         uint256 endIndex = startIndex + number;
         if (endIndex >= _registeredTokens.length) revert NFTFactoryErrors.WrongEndIndex();
         
@@ -77,27 +103,27 @@ contract NFTFactoryInit is
         return result;
     }
     
-    function getTokensTotal() external view override returns (uint256) {
+    function getTokensTotal() public view override returns (uint256) {
         return _registeredTokens.length;
     }
 
-    function getTokensByGovernanceTotal(address governance) external view override returns (uint256) {
+    function getTokensByGovernanceTotal(address governance) public view override returns (uint256) {
         return _tokensByGovernance[governance].length;
     }
 
-    function getTokenByAddress(address token) external view override returns (NFTToken memory) {
+    function getTokenByAddress(address token) public view override returns (NFTToken memory) {
         uint index = _tokenByAddress[token];
         if (index == 0) revert NFTFactoryErrors.UnexistingToken();
         return _registeredTokens[index - 1];
     }
 
-    function getTokenBySymbol(string calldata symbol) external view override returns (NFTToken memory) {
+    function getTokenBySymbol(string memory symbol) public view override returns (NFTToken memory) {
         uint index = _tokenBySymbol[symbol];
         if (index == 0) revert NFTFactoryErrors.UnexistingToken();
         return _registeredTokens[index - 1];
     }
 
-    function getTokensByGovernance(address governance, uint256 startIndex, uint256 number) external view override returns (NFTToken[] memory) {
+    function getTokensByGovernance(address governance, uint256 startIndex, uint256 number) public view override returns (NFTToken[] memory) {
         uint256 endIndex = startIndex + number;
         if (endIndex >= _tokensByGovernance[governance].length) revert NFTFactoryErrors.WrongEndIndex();
         
